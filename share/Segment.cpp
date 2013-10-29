@@ -4,10 +4,9 @@
 
 #include "TestBedSettings.h"
 #include "Lane.h"
+#include "SpeedDensityRelationshipTool.h"
 
 Segment::Segment() {
-	std::cout << "segment" << std::endl;
-
 	seg_length = TestBedSettings::seg_length;
 	hash_table_speed = new Segment_Speed_Hash();
 }
