@@ -39,7 +39,13 @@ public:
 	/*
 	 * Using New Framework
 	 */
-	void update_time_new_framework();
+	void xy_update_time(int current_time_step);
+
+	/*
+	 * Set of functions for the new framework
+	 * If name starts from "xy", the function is only used by the new framework
+	 */
+	void xy_add_a_new_vehicle_in_segment(int lane_id);
 
 public:
 	int seg_id;
