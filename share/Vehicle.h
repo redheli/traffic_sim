@@ -8,7 +8,10 @@
 #ifndef VEHICLE_H_
 #define VEHICLE_H_
 
+#include "shared_include.h"
+
 #include "Segment.h"
+#include "LanePath.h"
 
 #include <vector>
 
@@ -18,10 +21,15 @@ public:
 	virtual ~Vehicle();
 public:
 	int ID;
-	int joinTime;
+
 	Vehicle *next;
 	Vehicle *previous;
-	std::vector<Segment*> path;
+	LanePath* path;
+
+	/*
+	 * used in the new framework
+	 */
+	int joinTime;
 	int in_Queue_Time;
 };
 

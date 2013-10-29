@@ -8,6 +8,8 @@
 #ifndef TESTBEDSETTINGS_H_
 #define TESTBEDSETTINGS_H_
 
+#include "shared_include.h"
+
 class TestBedSettings {
 public:
 

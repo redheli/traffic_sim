@@ -8,6 +8,10 @@
 #include "RoadNetwork.h"
 #include <stddef.h>
 
+//Signton
+
+RoadNetwork RoadNetwork::instance_;
+
 RoadNetwork::RoadNetwork()
 {
 	seg1 = NULL;
@@ -22,7 +26,15 @@ RoadNetwork::~RoadNetwork()
 
 }
 
+/*
+ * TBA
+ * Need to add more in the road network
+ */
 void RoadNetwork::init_network()
 {
 	seg1 = new Segment();
+	seg2 = new Segment();
+	seg3 = new Segment();
+	seg4 = new Segment();
+	seg5 = new Segment();
 }
