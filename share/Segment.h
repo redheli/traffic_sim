@@ -43,7 +43,7 @@ public:
 
 public:
 	int seg_id;
-	int seg_length;
+	double seg_length;
 
 	std::vector<Lane*> all_lanes;
 	Segment_Speed_Hash* hash_table_speed;

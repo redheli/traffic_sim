@@ -8,7 +8,8 @@
 #ifndef SEGMENT_SPEED_HASH_HPP_
 #define SEGMENT_SPEED_HASH_HPP_
 
-#include <unordered_map>
+#include <map>
+//#include <unordered_map>
 
 #include "../TestBedSettings.h"
 
@@ -29,7 +30,9 @@ public:
 	double get_time_speed(int time);
 
 public:
-	std::unordered_map<int, double> speed_his;
+	//it is not supported on some computer
+//	std::unordered_map<int, double> speed_his;
+	std::map<int, double> speed_his;
 };
 
 

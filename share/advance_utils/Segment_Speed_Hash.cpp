@@ -15,7 +15,7 @@ Segment_Speed_Hash::Segment_Speed_Hash()
 	 * This is not the best choice, in reality, I should remove some;
 	 * But for this case study, it is fine;
 	 */
-	speed_his.reserve(TestBedSettings::total_time_step);
+//	speed_his.reserve(TestBedSettings::total_time_step);
 }
 
 Segment_Speed_Hash::~Segment_Speed_Hash()

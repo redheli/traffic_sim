@@ -11,7 +11,6 @@
 #include "shared_include.h"
 
 #include "Segment.h"
-#include "LanePath.h"
 
 #include <vector>
 
@@ -24,7 +23,12 @@ public:
 
 	Vehicle *next;
 	Vehicle *previous;
-	LanePath* path;
+
+	/*
+	 * Path is not saved, because in the small network, the path is hardcoded.
+	 */
+	int origin_node_id;
+	int densition_node_id;
 
 	/*
 	 * used in the new framework

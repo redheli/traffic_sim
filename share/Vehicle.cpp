@@ -11,7 +11,6 @@ Vehicle::Vehicle() {
 	// TODO Auto-generated constructor stub
 	next = NULL;
 	previous = NULL;
-	path = new LanePath();
 }
 
 Vehicle::~Vehicle() {
