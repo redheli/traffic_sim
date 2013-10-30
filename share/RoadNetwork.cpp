@@ -81,3 +81,17 @@ void RoadNetwork::init_network() {
 		seg1->all_lanes.push_back(one);
 	}
 }
+void RoadNetwork::update()
+{
+	// seg 4
+	seg4->update_time_dynamit_framework();
+	// seg 5
+	seg5->update_time_dynamit_framework();
+	// seg 3
+	seg3->update_time_dynamit_framework();
+	// seg 1
+	seg1->update_time_dynamit_framework();
+	// seg 2
+	seg2->update_time_dynamit_framework();
+
+}

@@ -6,6 +6,7 @@
  */
 #ifndef SEGMENT_H_
 #define SEGMENT_H_
+#include <queue>
 
 #include "shared_include.h"
 
@@ -53,6 +54,11 @@ public:
 
 	std::vector<Lane*> all_lanes;
 	Segment_Speed_Hash* hash_table_speed;
+
+public:
+	std::priority_queue<Vehicle*> queue_veh; // store vh in queue
+	double queue_length;
+	std::priority_queue<Vehicle*> move_veh; // store moving vh
 };
 
 #endif /* SEGMENT_H_ */

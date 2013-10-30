@@ -27,7 +27,7 @@ public:
 	/*
 	 * need path to know next segment
 	 */
-	std::vector<Segment*> path;
+	std::vector<Lane*> path;
 
 	int origin_node_id;
 	int densition_node_id;

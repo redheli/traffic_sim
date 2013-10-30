@@ -19,6 +19,8 @@ Segment::~Segment() {
 
 void Segment::update_time_dynamit_framework() {
 
+	// update queue first
+
 }
 
 void Segment::xy_update_time(int current_time_step) {
