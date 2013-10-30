@@ -25,8 +25,10 @@ public:
 	Vehicle *previous;
 
 	/*
-	 * Path is not saved, because in the small network, the path is hardcoded.
+	 * need path to know next segment
 	 */
+	std::vector<Segment*> path;
+
 	int origin_node_id;
 	int densition_node_id;
 
