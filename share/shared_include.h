@@ -13,5 +13,6 @@
 #include <string>
 #include <iostream>
 #include <queue>
+#include <assert.h>
 
 #endif /* SHARED_INCLUDE_H_ */

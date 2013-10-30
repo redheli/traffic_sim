@@ -7,6 +7,8 @@
 
 #include <iostream>
 
+#include "../share/shared_include.h"
+
 #include "../share/TestBedSettings.h"
 #include "../share/RoadNetwork.h"
 #include "../share/VehiclePackage.h"
@@ -78,7 +80,7 @@ int simulate_one_time_step() {
 	/*
 	 * Segment 1 & 2 simulated together
 	 */
-	RoadNetwork::instance().xy_simulate_seg1_2_together(current_time_step);
+	Segment::xy_simulate_seg1_2_together(current_time_step);
 
 	return 1;
 }

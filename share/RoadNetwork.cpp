@@ -9,6 +9,7 @@
 #include <stddef.h>
 
 #include "Lane.h"
+#include "GeneralTool.h"
 
 //Signton
 
@@ -82,7 +83,4 @@ void RoadNetwork::init_network() {
 	}
 }
 
-void RoadNetwork::xy_simulate_seg1_2_together(int current_time_step)
-{
 
-}

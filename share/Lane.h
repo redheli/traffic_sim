@@ -37,7 +37,12 @@ public:
 	LaneQueue* queue_status;
 
 	/*
-	 *
+	 * used by seg 1 & seg 2 only
+	 */
+	bool is_blocked;
+
+	/*
+	 * xy: I will not use these 2 variables
 	 */
 	Vehicle* inbound_vehicles;
 	Vehicle* outbound_vehicles;

@@ -31,6 +31,7 @@ Lane::~Lane() {
 }
 
 void Lane::reset_input_output_capacity() {
+	is_blocked = false;
 	outside_capacity_per_time_step_unit = TestBedSettings::lane_outside_capacity_per_time_step_unit;
 	inside_capacity_per_time_step_unit = TestBedSettings::lane_inside_capacity_per_time_step_unit;
 }
