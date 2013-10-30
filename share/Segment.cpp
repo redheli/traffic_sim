@@ -39,6 +39,9 @@ void Segment::xy_update_time(int current_time_step) {
 	double speed = GeneralTool::calculate_speed_based_on_density(moving_density);
 	this->hash_table_speed->add_time_speed(current_time_step, speed);
 
+	if (TestBedSettings::debug_mode)
+		std::cout << "seg " << this->seg_id << " speed:" << speed << std::endl;
+
 //Step 2: Update Can Pass Time
 	who_can_pass_offset += speed * TestBedSettings::time_step_unit;
 	while (who_can_pass_offset > this->seg_length) {
@@ -54,8 +57,18 @@ void Segment::xy_update_time(int current_time_step) {
 
 //Step 4: Update Queue
 
-//Step 5: Update Empty Space
 
+//Step 5: Update Empty Space
+	int last_time_step = this->all_lanes[0]->vehiclePackageQueue.back()->joinTime;
+	double total_empty_space = 0;
+	for (int i = last_time_step; i <= current_time_step; i++) {
+		total_empty_space += TestBedSettings::time_step_unit * this->hash_table_speed->get_time_speed(i);
+	}
+
+	total_empty_space -= this->all_lanes[0]->vehiclePackageQueue.back()->inner_vehicles.size() * TestBedSettings::VEHICLE_OCCUPANCY_LENGTH;
+	assert(total_empty_space > 0);
+
+	this->all_lanes[0]->empty_space = total_empty_space;
 }
 
 void Segment::xy_move_agents_to_next_segment(int current_time_step) {
@@ -83,6 +96,9 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 					if (*it)
 						delete (*it);
 				}
+
+//				if(this->all_lanes[0]->queue_status->end_queue_VehiclePackage == the_last)
+//					this->all_lanes[0]->queue_status->end_queue_VehiclePackage = NULL;
 
 				if (the_last)
 					delete the_last;
@@ -210,6 +226,8 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 				std::vector<Vehicle *>::iterator it = the_one->inner_vehicles.end() - 1;
 				Vehicle* one = (*it);
 				the_one->inner_vehicles.erase(it);
+
+				return one;
 			}
 			else {
 				std::vector<Vehicle *>::iterator it = the_one->inner_vehicles.end() - 1;
@@ -219,6 +237,8 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 					delete the_one;
 
 				RoadNetwork::instance().seg1->all_lanes[0]->vehiclePackageQueue.pop();
+
+				return one;
 			}
 		}
 		else {
@@ -228,6 +248,8 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 				std::vector<Vehicle *>::iterator it = the_one->inner_vehicles.end() - 1;
 				Vehicle* one = (*it);
 				the_one->inner_vehicles.erase(it);
+
+				return one;
 			}
 			else {
 				std::vector<Vehicle *>::iterator it = the_one->inner_vehicles.end() - 1;
@@ -237,6 +259,8 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 					delete the_one;
 
 				RoadNetwork::instance().seg2->all_lanes[0]->vehiclePackageQueue.pop();
+
+				return one;
 			}
 		}
 	}
@@ -248,6 +272,8 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 			std::vector<Vehicle *>::iterator it = the_one->inner_vehicles.end() - 1;
 			Vehicle* one = (*it);
 			the_one->inner_vehicles.erase(it);
+
+			return one;
 		}
 		else {
 			std::vector<Vehicle *>::iterator it = the_one->inner_vehicles.end() - 1;
@@ -257,6 +283,8 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 				delete the_one;
 
 			RoadNetwork::instance().seg1->all_lanes[0]->vehiclePackageQueue.pop();
+
+			return one;
 		}
 	}
 
@@ -267,6 +295,8 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 			std::vector<Vehicle *>::iterator it = the_one->inner_vehicles.end() - 1;
 			Vehicle* one = (*it);
 			the_one->inner_vehicles.erase(it);
+
+			return one;
 		}
 		else {
 			std::vector<Vehicle *>::iterator it = the_one->inner_vehicles.end() - 1;
@@ -276,6 +306,8 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 				delete the_one;
 
 			RoadNetwork::instance().seg2->all_lanes[0]->vehiclePackageQueue.pop();
+
+			return one;
 		}
 	}
 
@@ -290,6 +322,9 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 		double moving_density = RoadNetwork::instance().seg1->all_lanes[0]->in_moving_vehicles / moving_length;
 		double speed = GeneralTool::calculate_speed_based_on_density(moving_density);
 		RoadNetwork::instance().seg1->hash_table_speed->add_time_speed(current_time_step, speed);
+
+		if (TestBedSettings::debug_mode)
+			std::cout << "seg 1 speed:" << speed << std::endl;
 
 		//Step 2: Update Can Pass Time
 		RoadNetwork::instance().seg1->who_can_pass_offset += speed * TestBedSettings::time_step_unit;
@@ -308,6 +343,9 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 		double speed = GeneralTool::calculate_speed_based_on_density(moving_density);
 		RoadNetwork::instance().seg2->hash_table_speed->add_time_speed(current_time_step, speed);
 
+		if (TestBedSettings::debug_mode)
+			std::cout << "seg 2 speed:" << speed << std::endl;
+
 		//Step 2: Update Can Pass Time
 		RoadNetwork::instance().seg2->who_can_pass_offset += speed * TestBedSettings::time_step_unit;
 		while (RoadNetwork::instance().seg2->who_can_pass_offset > RoadNetwork::instance().seg2->seg_length) {
@@ -320,14 +358,17 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 	}
 
 	//Step 3: Move Vehicle To Next Segment
-	while (RoadNetwork::instance().seg3->all_lanes[0]->inside_capacity_per_time_step_unit > 0 && RoadNetwork::instance().seg3->all_lanes[0]->empty_space > TestBedSettings::VEHICLE_OCCUPANCY_LENGTH) {
+	int temp_input_capacity = RoadNetwork::instance().seg3->all_lanes[0]->inside_capacity_per_time_step_unit;
+	double temp_empty_space = RoadNetwork::instance().seg3->all_lanes[0]->empty_space;
+
+	while (temp_input_capacity > 0 && temp_empty_space > TestBedSettings::VEHICLE_OCCUPANCY_LENGTH) {
 		Vehicle* the_next_one = Segment::xy_find_the_next_vehicle_package();
 		if (the_next_one == NULL)
 			break;
 
 		Lane* go_to = RoadNetwork::instance().seg3->all_lanes[0];
-		go_to->inside_capacity_per_time_step_unit--;
-		go_to->empty_space -= TestBedSettings::VEHICLE_OCCUPANCY_LENGTH;
+		temp_input_capacity--;
+		temp_empty_space -= TestBedSettings::VEHICLE_OCCUPANCY_LENGTH;
 
 		//move to next Segment
 		VehiclePackage* the_back = go_to->vehiclePackageQueue.back();
