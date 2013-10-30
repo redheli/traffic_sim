@@ -7,6 +7,7 @@
 #include "SpeedDensityRelationshipTool.h"
 
 Segment::Segment() {
+	seg_id = 0;
 	seg_length = TestBedSettings::seg_length;
 	hash_table_speed = new Segment_Speed_Hash();
 }

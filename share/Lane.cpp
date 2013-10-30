@@ -6,9 +6,11 @@
  */
 
 #include "Lane.h"
+#include "TestBedSettings.h"
 
 Lane::Lane() {
-	the_segment = NULL;
+	lane_id = 0;
+//	the_segment = NULL;
 	queue_status = new LaneQueue();
 
 	inbound_vehicles = NULL;

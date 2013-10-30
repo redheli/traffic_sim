@@ -10,9 +10,11 @@
 
 #include "shared_include.h"
 
-#include "Segment.h"
+//#include "Segment.h"
 
 #include <vector>
+
+class Segment;
 
 class Vehicle {
 public:
@@ -35,8 +37,8 @@ public:
 	/*
 	 * used in the new framework
 	 */
-	int joinTime;
-	int in_Queue_Time;
+//	int joinTime; // move to vehicle package
+//	int in_Queue_Time; // move to vehicle package
 };
 
 #endif /* VEHICLE_H_ */

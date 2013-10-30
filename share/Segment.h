@@ -8,7 +8,7 @@
 #define SEGMENT_H_
 
 #include "shared_include.h"
-
+#include "Lane.h"
 #include "advance_utils/Segment_Speed_Hash.h"
 
 using namespace std;
@@ -16,7 +16,7 @@ using namespace std;
 /*
  * forward declaration
  */
-class Lane;
+//class Lane;
 
 class Segment
 {

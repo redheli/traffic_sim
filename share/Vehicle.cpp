@@ -12,7 +12,9 @@ Vehicle::Vehicle() {
 	next = NULL;
 	previous = NULL;
 
-	in_Queue_Time = 0;
+//	in_Queue_Time = 0;
+	origin_node_id = 0;
+	densition_node_id = 0;
 
 	static int seed_vehicle_ID = 0;
 	ID = seed_vehicle_ID++;

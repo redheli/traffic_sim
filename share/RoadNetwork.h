@@ -19,6 +19,11 @@ public:
 
 	void init_network();
 
+	/*
+	 * Using New Framework
+	 */
+	void xy_simulate_seg1_2_together(int current_time_step);
+
 public:
 	/*
 	 * List of Segments
