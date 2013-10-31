@@ -30,5 +30,5 @@ const double TestBedSettings::MAX_LANE_DENSITY = seg_length / VEHICLE_OCCUPANCY_
 const int TestBedSettings::loading_freq = 5 * time_step_unit; //how many time_step_units load once
 const int TestBedSettings::loading_vehicles = 2; //how many vehicles load once
 
-const bool TestBedSettings::debug_mode = false;
+const bool TestBedSettings::debug_mode = true;
 

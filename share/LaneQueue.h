@@ -13,7 +13,7 @@
 /*
  * forward declaration
  */
-class Vehicle;
+class VehiclePackage;
 
 class LaneQueue
 {
@@ -24,7 +24,7 @@ public:
 public:
 
 	double current_queue_length;
-	Vehicle* end_queue_vehicle;
+	VehiclePackage* end_queue_VehiclePackage;
 
 	double the_accumulated_offset;
 	int the_time_step;

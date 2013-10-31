@@ -33,20 +33,30 @@ public:
 	void reset_simulation_per_time_step();
 
 	/*
-	 * Using DynaMIT Framework
-	 */
-	void update_time_dynamit_framework();
-
-	/*
 	 * Using New Framework
 	 */
 	void xy_update_time(int current_time_step);
+
+	/*
+	 *
+	 */
+	void xy_move_agents_to_next_segment(int current_time_step);
 
 	/*
 	 * Set of functions for the new framework
 	 * If name starts from "xy", the function is only used by the new framework
 	 */
 	void xy_add_a_new_vehicle_in_segment(int lane_id);
+
+	/**
+	 * process seg 1 and seg 2;
+	 */
+	static Vehicle* xy_find_the_next_vehicle_package();
+
+	/*
+	 * process seg 1 and seg 2;
+	 */
+	static void xy_simulate_seg1_2_together(int current_time_step);
 
 public:
 	int seg_id;
@@ -55,10 +65,12 @@ public:
 	std::vector<Lane*> all_lanes;
 	Segment_Speed_Hash* hash_table_speed;
 
-public:
-	std::priority_queue<Vehicle*> queue_veh; // store vh in queue
-	double queue_length;
-	std::priority_queue<Vehicle*> move_veh; // store moving vh
+	/*
+	 * Used to judge who & when can pass the segment
+	 * If time <= who_can_pass_time, then can pass
+	 */
+	int who_can_pass_time;
+	double who_can_pass_offset;
 };
 
 #endif /* SEGMENT_H_ */

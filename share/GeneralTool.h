@@ -10,17 +10,16 @@
 
 #include "shared_include.h"
 #include "TestBedSettings.h"
+#include "RoadNetwork.h"
 
-class SpeedDensityRelationshipTool
-{
+class GeneralTool {
 private:
-	SpeedDensityRelationshipTool();
-	virtual ~SpeedDensityRelationshipTool();
+	GeneralTool();
+	virtual ~GeneralTool();
 
 public:
 
-	static double calculate_speed_based_on_density(double density_moving_part)
-	{
+	static double calculate_speed_based_on_density(double density_moving_part) {
 		double speed = TestBedSettings::MAX_SPEED * density_moving_part / TestBedSettings::MAX_LANE_DENSITY;
 		return speed < TestBedSettings::MIN_SPEED ? TestBedSettings::MIN_SPEED : speed;
 	}
