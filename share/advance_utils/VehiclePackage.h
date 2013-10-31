@@ -8,11 +8,10 @@
 #ifndef VEHICLEPACKAGE_H_
 #define VEHICLEPACKAGE_H_
 
-#include "shared_include.h"
-
-#include "Vehicle.h"
-
 #include <vector>
+
+#include "../shared_include.h"
+#include "../Vehicle.h"
 
 class VehiclePackage {
 public:
@@ -22,6 +21,9 @@ public:
 
 public:
 	std::vector<Vehicle *> inner_vehicles;
+
+	VehiclePackage* previous;
+	VehiclePackage* next;
 
 	int joinTime;
 	int vehicle_size;

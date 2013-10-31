@@ -12,7 +12,8 @@
 
 #include "LaneQueue.h"
 #include "Vehicle.h"
-#include "VehiclePackage.h"
+#include "advance_utils/VehiclePackage.h"
+#include "advance_utils/VehiclePackageQueue.h"
 
 //class Segment;
 class LaneQueue;
@@ -25,6 +26,8 @@ public:
 public:
 	void reset_input_output_capacity();
 
+
+
 public:
 	int lane_id;
 //	Segment* the_segment;
@@ -32,7 +35,7 @@ public:
 	/*
 	 * For the new framework
 	 */
-	std::queue<VehiclePackage*> vehiclePackageQueue;
+	VehiclePackageQueue vehiclePackageQueue;
 	LaneQueue* queue_status;
 
 	/*

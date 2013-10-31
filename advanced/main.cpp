@@ -11,7 +11,7 @@
 
 #include "../share/TestBedSettings.h"
 #include "../share/RoadNetwork.h"
-#include "../share/VehiclePackage.h"
+#include "../share/advance_utils/VehiclePackage.h"
 #include "../share/TimeTools.h"
 
 using namespace std;
