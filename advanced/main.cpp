@@ -38,7 +38,9 @@ int main() {
 		init_simulation_per_one_time_step();
 		simulate_one_time_step();
 		load_vehicles_one_time_step();
-		std::cout << "tick: " << current_time_step << std::endl;
+
+		if (TestBedSettings::debug_mode)
+			std::cout << "tick: " << current_time_step << std::endl;
 	}
 
 	profile.end_profiling();
@@ -97,6 +99,7 @@ int load_vehicles_one_time_step() {
 		{
 			VehiclePackage* one_pac = new VehiclePackage();
 			one_pac->joinTime = current_time_step;
+			one_pac->vehicle_size = TestBedSettings::loading_vehicles * 2;
 
 			for (int i = 0; i < TestBedSettings::loading_vehicles; i++) {
 				Vehicle *one = new Vehicle();
@@ -111,6 +114,8 @@ int load_vehicles_one_time_step() {
 			}
 
 			RoadNetwork::instance().seg1->all_lanes[0]->vehiclePackageQueue.push(one_pac);
+			RoadNetwork::instance().seg1->all_lanes[0]->queue_status->total_onside_vehicles += TestBedSettings::loading_vehicles * 2;
+			RoadNetwork::instance().seg1->all_lanes[0]->queue_status->in_moving_vehicles += TestBedSettings::loading_vehicles * 2;
 		}
 
 		/*
@@ -119,6 +124,7 @@ int load_vehicles_one_time_step() {
 		{
 			VehiclePackage* one_pac = new VehiclePackage();
 			one_pac->joinTime = current_time_step;
+			one_pac->vehicle_size = TestBedSettings::loading_vehicles * 2;
 
 			for (int i = 0; i < TestBedSettings::loading_vehicles; i++) {
 				Vehicle *one = new Vehicle();
@@ -133,6 +139,8 @@ int load_vehicles_one_time_step() {
 			}
 
 			RoadNetwork::instance().seg2->all_lanes[0]->vehiclePackageQueue.push(one_pac);
+			RoadNetwork::instance().seg2->all_lanes[0]->queue_status->total_onside_vehicles += TestBedSettings::loading_vehicles * 2;
+			RoadNetwork::instance().seg2->all_lanes[0]->queue_status->in_moving_vehicles += TestBedSettings::loading_vehicles * 2;
 		}
 	}
 

@@ -25,7 +25,8 @@ void TimeTools::end_profiling() {
 
 void TimeTools::output() {
 	double cost = diff_ms(end_time, start_time);
-	std::cout << "Time (ms)" << cost << std::endl;
+	std::cout << "===================================" << std::endl;
+	std::cout << "Simulation Time (ms)" << cost << std::endl;
 }
 
 double TimeTools::diff_ms(timeval t1, timeval t2) {

@@ -35,5 +35,4 @@ public:
 	std::map<int, double> speed_his;
 };
 
-
 #endif /* SEGMENT_SPEED_HASH_HPP_ */

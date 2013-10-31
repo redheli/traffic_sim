@@ -17,8 +17,7 @@
 //class Segment;
 class LaneQueue;
 
-class Lane
-{
+class Lane {
 public:
 	Lane();
 	virtual ~Lane();
@@ -39,7 +38,7 @@ public:
 	/*
 	 * used by seg 1 & seg 2 only
 	 */
-	bool is_blocked;
+//	bool is_blocked;
 
 	/*
 	 * xy: I will not use these 2 variables
@@ -50,10 +49,6 @@ public:
 	int outside_capacity_per_time_step_unit;
 	int inside_capacity_per_time_step_unit;
 	double empty_space;
-
-	int total_onside_vehicles;
-	int in_queue_vehicles;
-	int in_moving_vehicles;
 
 	/*
 	 * For the DynaMIT framework

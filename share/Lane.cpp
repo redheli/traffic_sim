@@ -20,9 +20,11 @@ Lane::Lane() {
 	inside_capacity_per_time_step_unit = 0;
 
 	empty_space = 0;
-	total_onside_vehicles = 0;
-	in_queue_vehicles = 0;
-	in_moving_vehicles = 0;
+
+//	is_blocked = false;
+//	total_onside_vehicles = 0;
+//	in_queue_vehicles = 0;
+//	in_moving_vehicles = 0;
 }
 
 Lane::~Lane() {
@@ -31,7 +33,7 @@ Lane::~Lane() {
 }
 
 void Lane::reset_input_output_capacity() {
-	is_blocked = false;
+//	is_blocked = false;
 	outside_capacity_per_time_step_unit = TestBedSettings::lane_outside_capacity_per_time_step_unit;
 	inside_capacity_per_time_step_unit = TestBedSettings::lane_inside_capacity_per_time_step_unit;
 }

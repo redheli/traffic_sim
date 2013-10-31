@@ -64,7 +64,7 @@ public:
 
 	/*
 	 * Used to judge who & when can pass the segment
-	 * If time <= who_can_pass_time, then can pass
+	 * If time < who_can_pass_time, then can pass
 	 */
 	int who_can_pass_time;
 	double who_can_pass_offset;

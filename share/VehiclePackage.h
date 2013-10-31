@@ -25,7 +25,7 @@ public:
 
 	int joinTime;
 	int vehicle_size;
-	int in_Queue_Time; // for merge ordering
+//	int in_Queue_Time; // for merge ordering
 };
 
 #endif /* VEHICLEPACKAGE_H_ */
