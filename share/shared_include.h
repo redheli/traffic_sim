@@ -12,5 +12,6 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <queue>
 
 #endif /* SHARED_INCLUDE_H_ */

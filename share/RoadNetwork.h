@@ -18,8 +18,11 @@ public:
 	virtual ~RoadNetwork();
 
 	void init_network();
-
-	void update();
+    void update();
+	/*
+	 * Using New Framework
+	 */
+	void xy_simulate_seg1_2_together(int current_time_step);
 
 public:
 	/*

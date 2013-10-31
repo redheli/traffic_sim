@@ -10,9 +10,11 @@
 
 #include "shared_include.h"
 
-#include "Segment.h"
+//#include "Segment.h"
 
 #include <vector>
+
+class Segment;
 
 class Vehicle {
 public:
@@ -20,6 +22,7 @@ public:
 	virtual ~Vehicle();
 public:
 	int ID;
+	double position; // position on the lane
 
 	Vehicle *next;
 	Vehicle *previous;
@@ -27,7 +30,7 @@ public:
 	/*
 	 * need path to know next segment
 	 */
-	std::vector<Lane*> path;
+	std::vector<Segment*> path;
 
 	int origin_node_id;
 	int densition_node_id;
@@ -35,8 +38,8 @@ public:
 	/*
 	 * used in the new framework
 	 */
-	int joinTime;
-	int in_Queue_Time;
+//	int joinTime; // move to vehicle package
+//	int in_Queue_Time; // move to vehicle package
 };
 
 #endif /* VEHICLE_H_ */

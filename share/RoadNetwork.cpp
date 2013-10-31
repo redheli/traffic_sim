@@ -36,7 +36,8 @@ void RoadNetwork::init_network() {
 	{
 		Lane* one = new Lane();
 		one->lane_id = 1;
-		one->the_segment = seg1;
+//		one->the_segment = seg1;
+		one->empty_space = seg1->seg_length;
 		seg1->all_lanes.push_back(one);
 	}
 
@@ -45,8 +46,9 @@ void RoadNetwork::init_network() {
 	{
 		Lane* one = new Lane();
 		one->lane_id = 2;
-		one->the_segment = seg2;
-		seg1->all_lanes.push_back(one);
+//		one->the_segment = seg2;
+		one->empty_space = seg2->seg_length;
+		seg2->all_lanes.push_back(one);
 	}
 
 	seg3 = new Segment();
@@ -54,37 +56,51 @@ void RoadNetwork::init_network() {
 	{
 		Lane* one = new Lane();
 		one->lane_id = 3;
-		one->the_segment = seg3;
-		seg1->all_lanes.push_back(one);
-
-		Lane* two = new Lane();
-		two->lane_id = 4;
-		two->the_segment = seg3;
-		seg1->all_lanes.push_back(two);
+//		one->the_segment = seg3;
+		one->empty_space = seg3->seg_length;
+		seg3->all_lanes.push_back(one);
 	}
 
 	seg4 = new Segment();
 	seg4->seg_id = 4;
 	{
 		Lane* one = new Lane();
-		one->lane_id = 5;
-		one->the_segment = seg4;
-		seg1->all_lanes.push_back(one);
+		one->lane_id = 4;
+//		one->the_segment = seg4;
+		one->empty_space = seg4->seg_length;
+		seg4->all_lanes.push_back(one);
 	}
 
 	seg5 = new Segment();
 	seg5->seg_id = 5;
 	{
 		Lane* one = new Lane();
-		one->lane_id = 6;
-		one->the_segment = seg5;
-		seg1->all_lanes.push_back(one);
+		one->lane_id = 5;
+//		one->the_segment = seg5;
+		one->empty_space = seg5->seg_length;
+		seg5->all_lanes.push_back(one);
 	}
+}
+
+void RoadNetwork::xy_simulate_seg1_2_together(int current_time_step)
+{
+
 }
 void RoadNetwork::update()
 {
+    double dt = 0.1;
+    double speed_move_in_queue = 3;
 	// seg 4
-	seg4->update_time_dynamit_framework();
+	for(int i=0; i< seg4->queue_veh.size(); ++i)
+	{
+		Vehicle *vh = seg4->queue_veh[i];
+		vh->position += dt*speed_move_in_queue;
+		if(vh->position > seg4->seg_length)
+		{
+			// out
+
+		}
+	}
 	// seg 5
 	seg5->update_time_dynamit_framework();
 	// seg 3
@@ -94,4 +110,8 @@ void RoadNetwork::update()
 	// seg 2
 	seg2->update_time_dynamit_framework();
 
+	// add vh to network
+
+
 }
+

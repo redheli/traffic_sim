@@ -12,8 +12,9 @@
 
 #include "LaneQueue.h"
 #include "Vehicle.h"
+#include "VehiclePackage.h"
 
-class Segment;
+//class Segment;
 class LaneQueue;
 
 class Lane
@@ -27,12 +28,17 @@ public:
 
 public:
 	int lane_id;
-	Segment* the_segment;
+//	Segment* the_segment;
 
 	/*
 	 * For the new framework
 	 */
+	std::queue<VehiclePackage*> vehiclePackageQueue;
 	LaneQueue* queue_status;
+
+	/*
+	 *
+	 */
 	Vehicle* inbound_vehicles;
 	Vehicle* outbound_vehicles;
 
