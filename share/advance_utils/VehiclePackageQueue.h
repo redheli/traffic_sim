@@ -20,9 +20,20 @@ public:
 	virtual ~VehiclePackageQueue();
 
 public:
+	bool empty();
+	VehiclePackage* front();
+	VehiclePackage* back();
+
+	bool pop();
+	bool push_back(VehiclePackage* one);
+
+	int size();
+
+public:
 
 	VehiclePackage* queueFront;
 	VehiclePackage* queueEnd;
+	int package_size;
 };
 
 

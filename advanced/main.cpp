@@ -40,7 +40,10 @@ int main() {
 		load_vehicles_one_time_step();
 
 		if (TestBedSettings::debug_mode)
+		{
 			std::cout << "tick: " << current_time_step << std::endl;
+			std::cout << "----------------------------------------------" << std::endl;
+		}
 	}
 
 	profile.end_profiling();
@@ -113,7 +116,7 @@ int load_vehicles_one_time_step() {
 				one_pac->inner_vehicles.push_back(two);
 			}
 
-			RoadNetwork::instance().seg1->all_lanes[0]->vehiclePackageQueue.push(one_pac);
+			RoadNetwork::instance().seg1->all_lanes[0]->vehiclePackageQueue.push_back(one_pac);
 			RoadNetwork::instance().seg1->all_lanes[0]->queue_status->total_onside_vehicles += TestBedSettings::loading_vehicles * 2;
 			RoadNetwork::instance().seg1->all_lanes[0]->queue_status->in_moving_vehicles += TestBedSettings::loading_vehicles * 2;
 		}
@@ -138,7 +141,7 @@ int load_vehicles_one_time_step() {
 				one_pac->inner_vehicles.push_back(two);
 			}
 
-			RoadNetwork::instance().seg2->all_lanes[0]->vehiclePackageQueue.push(one_pac);
+			RoadNetwork::instance().seg2->all_lanes[0]->vehiclePackageQueue.push_back(one_pac);
 			RoadNetwork::instance().seg2->all_lanes[0]->queue_status->total_onside_vehicles += TestBedSettings::loading_vehicles * 2;
 			RoadNetwork::instance().seg2->all_lanes[0]->queue_status->in_moving_vehicles += TestBedSettings::loading_vehicles * 2;
 		}

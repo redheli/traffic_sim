@@ -12,8 +12,8 @@ VehiclePackage::VehiclePackage() {
 	vehicle_size = 0;
 //	in_Queue_Time = 0;
 
-	previous = NULL;
-	next = NULL;
+	front = NULL;
+	back = NULL;
 }
 
 VehiclePackage::~VehiclePackage() {

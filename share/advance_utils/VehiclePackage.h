@@ -22,8 +22,8 @@ public:
 public:
 	std::vector<Vehicle *> inner_vehicles;
 
-	VehiclePackage* previous;
-	VehiclePackage* next;
+	VehiclePackage* front;
+	VehiclePackage* back;
 
 	int joinTime;
 	int vehicle_size;

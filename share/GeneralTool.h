@@ -20,7 +20,7 @@ private:
 public:
 
 	static double calculate_speed_based_on_density(double density_moving_part) {
-		double speed = TestBedSettings::MAX_SPEED - TestBedSettings::MAX_SPEED * density_moving_part / TestBedSettings::MAX_LANE_DENSITY;
+		double speed = TestBedSettings::MAX_SPEED - TestBedSettings::MAX_SPEED * density_moving_part / (TestBedSettings::MAX_LANE_DENSITY / 2);
 		return speed < TestBedSettings::MIN_SPEED ? TestBedSettings::MIN_SPEED : speed;
 	}
 

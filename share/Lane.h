@@ -26,7 +26,7 @@ public:
 public:
 	void reset_input_output_capacity();
 
-
+	void update_queue_status_when_moving_segment(int time_step_in_queue);
 
 public:
 	int lane_id;
