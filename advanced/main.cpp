@@ -13,6 +13,8 @@
 #include "../share/RoadNetwork.h"
 #include "../share/advance_utils/VehiclePackage.h"
 #include "../share/TimeTools.h"
+#include "../share/Segment.h"
+#include "../share/Lane.h"
 
 using namespace std;
 
@@ -39,8 +41,7 @@ int main() {
 		simulate_one_time_step();
 		load_vehicles_one_time_step();
 
-		if (TestBedSettings::debug_mode)
-		{
+		if (TestBedSettings::debug_mode) {
 			std::cout << "tick: " << current_time_step << std::endl;
 			std::cout << "----------------------------------------------" << std::endl;
 		}
@@ -85,16 +86,27 @@ int simulate_one_time_step() {
 	/*
 	 * Segment 1 & 2 simulated together
 	 */
-	Segment::xy_simulate_seg1_2_together(current_time_step);
+	RoadNetwork::instance().seg1->xy_simulate_seg1_2_together(current_time_step);
 
 	return 1;
 }
 
 int load_vehicles_one_time_step() {
-	if (TestBedSettings::debug_mode)
-		std::cout << "load_vehicles_one_time_step: " << std::endl;
+//	if (TestBedSettings::debug_mode)
+//		std::cout << "load_vehicles_one_time_step: " << std::endl;
 
 	if (current_time_step % TestBedSettings::loading_freq == 0) {
+
+		if (RoadNetwork::instance().seg1->all_lanes[0]->empty_space < TestBedSettings::VEHICLE_OCCUPANCY_LENGTH * 2
+				|| RoadNetwork::instance().seg2->all_lanes[0]->empty_space < TestBedSettings::VEHICLE_OCCUPANCY_LENGTH * 2) {
+
+//			std::cout << "no space to load_vehicles_one_time_step: 0" << std::endl;
+
+			return 0;
+		}
+
+//		std::cout << "load_vehicles_one_time_step: 4" << std::endl;
+
 		/*
 		 * Currently, there is no constrains on the empty space
 		 * Segment 1

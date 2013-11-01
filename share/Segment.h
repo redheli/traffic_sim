@@ -8,7 +8,7 @@
 #define SEGMENT_H_
 
 #include "shared_include.h"
-#include "Lane.h"
+//#include "Lane.h"
 #include "advance_utils/Segment_Speed_Hash.h"
 
 using namespace std;
@@ -16,7 +16,9 @@ using namespace std;
 /*
  * forward declaration
  */
-//class Lane;
+class Vehicle;
+class Lane;
+
 class Segment {
 public:
 	Segment();
@@ -48,12 +50,12 @@ public:
 	/**
 	 * process seg 1 and seg 2;
 	 */
-	static Vehicle* xy_find_the_next_vehicle_package();
+	Vehicle* xy_find_the_next_vehicle_package();
 
 	/*
 	 * process seg 1 and seg 2;
 	 */
-	static void xy_simulate_seg1_2_together(int current_time_step);
+	void xy_simulate_seg1_2_together(int current_time_step);
 
 public:
 	int seg_id;

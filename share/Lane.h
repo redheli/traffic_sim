@@ -15,7 +15,7 @@
 #include "advance_utils/VehiclePackage.h"
 #include "advance_utils/VehiclePackageQueue.h"
 
-//class Segment;
+class Segment;
 class LaneQueue;
 
 class Lane {
@@ -28,9 +28,11 @@ public:
 
 	void update_queue_status_when_moving_segment(int time_step_in_queue);
 
+	void update_queue_status_after_moving_segment(int time_step);
+
 public:
 	int lane_id;
-//	Segment* the_segment;
+	Segment* the_segment;
 
 	/*
 	 * For the new framework

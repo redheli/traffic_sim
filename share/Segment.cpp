@@ -40,11 +40,13 @@ void Segment::xy_update_time(int current_time_step) {
 	this->hash_table_speed->add_time_speed(current_time_step, speed);
 
 	if (TestBedSettings::debug_mode)
-		std::cout << "seg_ID:" << this->seg_id << ",speed:" << speed << ",moving:" << this->all_lanes[0]->queue_status->in_moving_vehicles << ",all:"
-				<< this->all_lanes[0]->queue_status->total_onside_vehicles << ",queue:" << this->all_lanes[0]->queue_status->current_queue_length << std::endl;
+		std::cout << "seg_ID:" << this->seg_id << "	,speed:" << speed << "	,moving:" << this->all_lanes[0]->queue_status->in_moving_vehicles << "	,all:"
+				<< this->all_lanes[0]->queue_status->total_onside_vehicles << "	,queue:" << this->all_lanes[0]->queue_status->current_queue_length << "	,empty space:"
+				<< this->all_lanes[0]->empty_space << std::endl;
 
 //Step 2: Update Can Pass Time
 	who_can_pass_offset += speed * TestBedSettings::time_step_unit;
+	this->all_lanes[0]->queue_status->the_accumulated_offset += speed * TestBedSettings::time_step_unit;
 
 	while (who_can_pass_offset > this->seg_length) {
 		who_can_pass_time += TestBedSettings::time_step_unit;
@@ -62,11 +64,13 @@ void Segment::xy_update_time(int current_time_step) {
 	xy_move_agents_to_next_segment(current_time_step);
 
 //Step 4: Update Queue
+	this->all_lanes[0]->update_queue_status_after_moving_segment(who_can_pass_time);
 
 //Step 5: Update Empty Space
 	if (this->all_lanes[0]->vehiclePackageQueue.empty()) {
 		this->all_lanes[0]->empty_space = this->seg_length;
-	} else {
+	}
+	else {
 		int last_time_step = this->all_lanes[0]->vehiclePackageQueue.back()->joinTime;
 		double total_empty_space = 0;
 		for (int i = last_time_step + TestBedSettings::time_step_unit; i <= current_time_step; i += TestBedSettings::time_step_unit) {
@@ -74,6 +78,11 @@ void Segment::xy_update_time(int current_time_step) {
 		}
 
 //		total_empty_space -= this->all_lanes[0]->vehiclePackageQueue.back()->inner_vehicles.size() * TestBedSettings::VEHICLE_OCCUPANCY_LENGTH;
+
+		//queue feedback
+		if (total_empty_space > (this->seg_length - this->all_lanes[0]->queue_status->current_queue_length)) {
+			total_empty_space = this->seg_length - this->all_lanes[0]->queue_status->current_queue_length;
+		}
 
 		assert(total_empty_space >= 0);
 
@@ -153,7 +162,8 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 				out_capacity = 0;
 			}
 		}
-	} else if (seg_id == 3) {
+	}
+	else if (seg_id == 3) {
 		bool can_stop = false;
 
 		int iii = 0;
@@ -187,7 +197,8 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 					if (go_to->inside_capacity_per_time_step_unit > 0 && go_to->empty_space > TestBedSettings::VEHICLE_OCCUPANCY_LENGTH) {
 						go_to->inside_capacity_per_time_step_unit--;
 						go_to->empty_space -= TestBedSettings::VEHICLE_OCCUPANCY_LENGTH;
-					} else {
+					}
+					else {
 						//no more space, so stop here
 						can_stop = true;
 						break;
@@ -209,18 +220,21 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 						the_back = new VehiclePackage();
 						the_back->joinTime = current_time_step;
 						go_to->vehiclePackageQueue.push_back(the_back);
-					} else {
+					}
+					else {
 						the_back = go_to->vehiclePackageQueue.back();
 					}
 
 					the_back->inner_vehicles.push_back(*it);
 					the_back->vehicle_size++;
-				} else if (the_vehicle->densition_node_id == 6) {
+				}
+				else if (the_vehicle->densition_node_id == 6) {
 					Lane* go_to = RoadNetwork::instance().seg5->all_lanes[0];
 					if (go_to->inside_capacity_per_time_step_unit > 0 && go_to->empty_space > TestBedSettings::VEHICLE_OCCUPANCY_LENGTH) {
 						go_to->inside_capacity_per_time_step_unit--;
 						go_to->empty_space -= TestBedSettings::VEHICLE_OCCUPANCY_LENGTH;
-					} else {
+					}
+					else {
 						//no more space, so stop here
 						can_stop = true;
 						break;
@@ -242,13 +256,15 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 						the_back = new VehiclePackage();
 						the_back->joinTime = current_time_step;
 						go_to->vehiclePackageQueue.push_back(the_back);
-					} else {
+					}
+					else {
 						the_back = go_to->vehiclePackageQueue.back();
 					}
 
 					the_back->inner_vehicles.push_back(*it);
 					the_back->vehicle_size++;
-				} else {
+				}
+				else {
 					std::cout << "Error: Not Existing Des When process seg 3" << std::endl;
 				}
 
@@ -269,7 +285,8 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 				all_lanes[0]->vehiclePackageQueue.pop();
 			}
 		}
-	} else if (seg_id == 1 || seg_id == 2) {
+	}
+	else if (seg_id == 1 || seg_id == 2) {
 		std::cout << "Error: should not use the function to process seg 1 and seg 2." << std::endl;
 	}
 }
@@ -296,14 +313,18 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 
 		if (random_seed == 0) {
 			pass_1 = true;
-		} else {
+		}
+		else {
 			pass_2 = true;
 		}
-	} else if (can_pass_1) {
+	}
+	else if (can_pass_1) {
 		pass_1 = true;
-	} else if (can_pass_2) {
+	}
+	else if (can_pass_2) {
 		pass_2 = true;
-	} else {
+	}
+	else {
 		return NULL;
 	}
 
@@ -325,7 +346,8 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 			}
 
 			return one;
-		} else {
+		}
+		else {
 			std::vector<Vehicle *>::iterator it = the_one->inner_vehicles.end() - 1;
 			Vehicle* one = (*it);
 
@@ -344,7 +366,8 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 			return one;
 		}
 
-	} else if (pass_2 == true) {
+	}
+	else if (pass_2 == true) {
 		VehiclePackage* the_one = RoadNetwork::instance().seg2->all_lanes[0]->vehiclePackageQueue.front();
 		Segment* seg = RoadNetwork::instance().seg2;
 
@@ -362,7 +385,8 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 			}
 
 			return one;
-		} else {
+		}
+		else {
 			std::vector<Vehicle *>::iterator it = the_one->inner_vehicles.end() - 1;
 			Vehicle* one = (*it);
 
@@ -397,8 +421,9 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 		seg->hash_table_speed->add_time_speed(current_time_step, speed);
 
 		if (TestBedSettings::debug_mode)
-			std::cout << "seg_ID:" << seg->seg_id << ",speed:" << speed << ",moving:" << seg->all_lanes[0]->queue_status->in_moving_vehicles << ",all:"
-					<< seg->all_lanes[0]->queue_status->total_onside_vehicles << ",queue:" << seg->all_lanes[0]->queue_status->current_queue_length << std::endl;
+			std::cout << "seg_ID:" << seg->seg_id << "	,speed:" << speed << "	,moving:" << seg->all_lanes[0]->queue_status->in_moving_vehicles << "	,all:"
+					<< seg->all_lanes[0]->queue_status->total_onside_vehicles << "	,queue:" << seg->all_lanes[0]->queue_status->current_queue_length << "	,empty space:"
+					<< seg->all_lanes[0]->empty_space << std::endl;
 
 		//Step 2: Update Can Pass Time
 		seg->who_can_pass_offset += speed * TestBedSettings::time_step_unit;
@@ -422,8 +447,9 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 		seg->hash_table_speed->add_time_speed(current_time_step, speed);
 
 		if (TestBedSettings::debug_mode)
-			std::cout << "seg_ID:" << seg->seg_id << ",speed:" << speed << ",moving:" << seg->all_lanes[0]->queue_status->in_moving_vehicles << ",all:"
-					<< seg->all_lanes[0]->queue_status->total_onside_vehicles << ",queue:" << seg->all_lanes[0]->queue_status->current_queue_length << std::endl;
+			std::cout << "seg_ID:" << seg->seg_id << "	,speed:" << speed << "	,moving:" << seg->all_lanes[0]->queue_status->in_moving_vehicles << "	,all:"
+					<< seg->all_lanes[0]->queue_status->total_onside_vehicles << "	,queue:" << seg->all_lanes[0]->queue_status->current_queue_length << "	,empty space:"
+					<< seg->all_lanes[0]->empty_space << std::endl;
 
 		//Step 2: Update Can Pass Time
 		seg->who_can_pass_offset += speed * TestBedSettings::time_step_unit;
@@ -477,7 +503,8 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 			the_back = new VehiclePackage();
 			the_back->joinTime = current_time_step;
 			go_to->vehiclePackageQueue.push_back(the_back);
-		} else {
+		}
+		else {
 			the_back = go_to->vehiclePackageQueue.back();
 		}
 
@@ -488,24 +515,64 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 	}
 
 //Step 4: Update Queue Status
+	RoadNetwork::instance().seg1->all_lanes[0]->update_queue_status_after_moving_segment(current_time_step);
+	RoadNetwork::instance().seg2->all_lanes[0]->update_queue_status_after_moving_segment(current_time_step);
 
 //Step 5: Update Empty Space
 //No need to calculate for seg 1 and seg 2;
-//	if (this->all_lanes[0]->vehiclePackageQueue.empty()) {
-//		this->all_lanes[0]->empty_space = this->seg_length;
-//	}
-//	else {
-//		int last_time_step = this->all_lanes[0]->vehiclePackageQueue.back()->joinTime;
-//		double total_empty_space = 0;
-//		for (int i = last_time_step; i <= current_time_step; i++) {
-//			total_empty_space += TestBedSettings::time_step_unit * this->hash_table_speed->get_time_speed(i);
-//		}
-//
-//		total_empty_space -= this->all_lanes[0]->vehiclePackageQueue.back()->inner_vehicles.size() * TestBedSettings::VEHICLE_OCCUPANCY_LENGTH;
-//		assert(total_empty_space > 0);
-//
-//		this->all_lanes[0]->empty_space = total_empty_space;
-//	}
+	{
+		Segment* seg = RoadNetwork::instance().seg1;
+		if (seg->all_lanes[0]->vehiclePackageQueue.empty()) {
+			seg->all_lanes[0]->empty_space = seg->seg_length;
+		}
+		else {
+			int last_time_step = seg->all_lanes[0]->vehiclePackageQueue.back()->joinTime;
+			double total_empty_space = 0;
+			for (int i = last_time_step + TestBedSettings::time_step_unit; i <= current_time_step; i += TestBedSettings::time_step_unit) {
+				total_empty_space += TestBedSettings::time_step_unit * seg->hash_table_speed->get_time_speed(i);
+			}
+
+//			total_empty_space -= all_lanes[0]->vehiclePackageQueue.back()->inner_vehicles.size() * TestBedSettings::VEHICLE_OCCUPANCY_LENGTH;
+			//queue feedback
+			if (total_empty_space > (seg->seg_length - seg->all_lanes[0]->queue_status->current_queue_length)) {
+				total_empty_space = seg->seg_length - seg->all_lanes[0]->queue_status->current_queue_length;
+			}
+
+
+			if(total_empty_space < 0) total_empty_space = 0;
+			assert(total_empty_space >= 0);
+
+
+
+			seg->all_lanes[0]->empty_space = total_empty_space;
+		}
+	}
+
+	{
+		Segment* seg = RoadNetwork::instance().seg2;
+		if (seg->all_lanes[0]->vehiclePackageQueue.empty()) {
+			seg->all_lanes[0]->empty_space = seg->seg_length;
+		}
+		else {
+			int last_time_step = seg->all_lanes[0]->vehiclePackageQueue.back()->joinTime;
+			double total_empty_space = 0;
+			for (int i = last_time_step + TestBedSettings::time_step_unit; i <= current_time_step; i += TestBedSettings::time_step_unit) {
+				total_empty_space += TestBedSettings::time_step_unit * seg->hash_table_speed->get_time_speed(i);
+			}
+
+//			total_empty_space -= all_lanes[0]->vehiclePackageQueue.back()->inner_vehicles.size() * TestBedSettings::VEHICLE_OCCUPANCY_LENGTH;
+			//queue feedback
+			if (total_empty_space > (seg->seg_length - seg->all_lanes[0]->queue_status->current_queue_length)) {
+				total_empty_space = seg->seg_length - seg->all_lanes[0]->queue_status->current_queue_length;
+			}
+
+			if(total_empty_space < 0) total_empty_space = 0;
+
+			assert(total_empty_space >= 0);
+
+			seg->all_lanes[0]->empty_space = total_empty_space;
+		}
+	}
 }
 
 void Segment::reset_simulation_per_time_step() {

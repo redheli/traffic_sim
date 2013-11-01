@@ -7,6 +7,7 @@
 
 #include "Lane.h"
 #include "TestBedSettings.h"
+#include "Segment.h"
 
 Lane::Lane() {
 	lane_id = 0;
@@ -55,9 +56,16 @@ void Lane::update_queue_status_when_moving_segment(int time_step_in_queue) {
 			queue_status->in_queue_vehicles = queue_status->end_queue_VehiclePackage->vehicle_size;
 			queue_status->current_queue_length = queue_status->end_queue_VehiclePackage->vehicle_size * TestBedSettings::VEHICLE_OCCUPANCY_LENGTH;
 			queue_status->in_moving_vehicles -= queue_status->end_queue_VehiclePackage->vehicle_size;
-		} else {
+
+			queue_status->the_accumulated_offset = this->the_segment->who_can_pass_offset;
+		}
+		else {
 			return;
 		}
+	}
+	else
+	{
+		queue_status->the_accumulated_offset += this->the_segment->hash_table_speed->get_time_speed(time_step_in_queue);
 	}
 
 	//
@@ -68,12 +76,51 @@ void Lane::update_queue_status_when_moving_segment(int time_step_in_queue) {
 			queue_status->in_queue_vehicles += queue_status->end_queue_VehiclePackage->vehicle_size;
 			queue_status->current_queue_length += queue_status->end_queue_VehiclePackage->vehicle_size * TestBedSettings::VEHICLE_OCCUPANCY_LENGTH;
 			queue_status->in_moving_vehicles -= queue_status->end_queue_VehiclePackage->vehicle_size;
-		} else {
+		}
+		else {
 			break;
 		}
 
 //		if (TestBedSettings::debug_mode)
 //			std::cout << "update_queue_status_when_moving_segment" << std::endl;
+	}
+}
+
+void Lane::update_queue_status_after_moving_segment(int time_step) {
+
+	if (time_step == 48) {
+		int iii = 1;
+	}
+
+	while (true) {
+		if (queue_status->end_queue_VehiclePackage == NULL) {
+			break;
+		}
+		else if (queue_status->end_queue_VehiclePackage->back != NULL) {
+
+			int old_time_step = queue_status->end_queue_VehiclePackage->joinTime;
+			int new_time_step = queue_status->end_queue_VehiclePackage->back->joinTime;
+			double current_offset = queue_status->the_accumulated_offset;
+
+			for (int i = old_time_step; i < new_time_step; i += TestBedSettings::time_step_unit) {
+				current_offset -= the_segment->hash_table_speed->get_time_speed(i) * TestBedSettings::time_step_unit;
+			}
+
+			//put in the queue end
+			if (current_offset + queue_status->current_queue_length >= the_segment->seg_length) {
+				queue_status->end_queue_VehiclePackage = queue_status->end_queue_VehiclePackage->back;
+				queue_status->in_queue_vehicles += queue_status->end_queue_VehiclePackage->vehicle_size;
+				queue_status->current_queue_length += queue_status->end_queue_VehiclePackage->vehicle_size * TestBedSettings::VEHICLE_OCCUPANCY_LENGTH;
+				queue_status->in_moving_vehicles -= queue_status->end_queue_VehiclePackage->vehicle_size;
+				queue_status->the_accumulated_offset = current_offset;
+			}
+			else {
+				break;
+			}
+		}
+		else {
+			break;
+		}
 	}
 }
 

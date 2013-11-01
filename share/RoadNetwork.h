@@ -10,7 +10,7 @@
 
 #include "shared_include.h"
 
-#include "Segment.h"
+class Segment;
 
 class RoadNetwork {
 public:

@@ -27,7 +27,7 @@ public:
 	VehiclePackage* end_queue_VehiclePackage;
 
 	//offset
-//	double the_accumulated_offset;
+	double the_accumulated_offset;
 //	int the_time_step;
 
 	//vehicles
