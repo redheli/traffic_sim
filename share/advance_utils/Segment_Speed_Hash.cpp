@@ -28,4 +28,3 @@ int Segment_Speed_Hash::add_time_speed(int time, double speed) {
 double Segment_Speed_Hash::get_time_speed(int time) {
 	return speed_his[time];
 }
-

@@ -11,7 +11,7 @@
 
 Lane::Lane() {
 	lane_id = 0;
-//	the_segment = NULL;
+	the_segment = NULL;
 	queue_status = new LaneQueue();
 
 	inbound_vehicles = NULL;
@@ -21,6 +21,8 @@ Lane::Lane() {
 	inside_capacity_per_time_step_unit = 0;
 
 	empty_space = 0;
+
+	capacity_ratio = 1;
 
 //	is_blocked = false;
 //	total_onside_vehicles = 0;
@@ -35,8 +37,8 @@ Lane::~Lane() {
 
 void Lane::reset_input_output_capacity() {
 //	is_blocked = false;
-	outside_capacity_per_time_step_unit = TestBedSettings::lane_outside_capacity_per_time_step_unit;
-	inside_capacity_per_time_step_unit = TestBedSettings::lane_inside_capacity_per_time_step_unit;
+	outside_capacity_per_time_step_unit = TestBedSettings::lane_outside_capacity_per_time_step_unit * this->capacity_ratio;
+	inside_capacity_per_time_step_unit = TestBedSettings::lane_inside_capacity_per_time_step_unit * this->capacity_ratio;
 }
 
 void Lane::update_queue_status_when_moving_segment(int time_step_in_queue) {
@@ -83,6 +85,14 @@ void Lane::update_queue_status_when_moving_segment(int time_step_in_queue) {
 
 //		if (TestBedSettings::debug_mode)
 //			std::cout << "update_queue_status_when_moving_segment" << std::endl;
+	}
+
+	int temp_t = queue_status->end_queue_VehiclePackage->joinTime;
+	while(temp_t < time_step_in_queue)
+	{
+//		std::cout << "It does happen" << std::endl;
+		queue_status->the_accumulated_offset += this->the_segment->hash_table_speed->get_time_speed(temp_t);
+		temp_t += TestBedSettings::time_step_unit;
 	}
 }
 

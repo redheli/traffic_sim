@@ -14,5 +14,6 @@
 #include <iostream>
 #include <queue>
 #include <assert.h>
+#include <cstdlib>
 
 #endif /* SHARED_INCLUDE_H_ */

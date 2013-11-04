@@ -14,6 +14,8 @@ Segment::Segment() {
 
 	who_can_pass_time = TestBedSettings::start_time_step - TestBedSettings::time_step_unit;
 	who_can_pass_offset = 0;
+
+	last_remove_time_step = TestBedSettings::start_time_step - TestBedSettings::time_step_unit;
 }
 
 Segment::~Segment() {
@@ -38,6 +40,9 @@ void Segment::xy_update_time(int current_time_step) {
 	double moving_density = this->all_lanes[0]->queue_status->in_moving_vehicles / moving_length;
 	double speed = GeneralTool::calculate_speed_based_on_density(moving_density);
 	this->hash_table_speed->add_time_speed(current_time_step, speed);
+
+	if (current_time_step % TestBedSettings::remove_speed_frequency == 0)
+		this->xy_clear_old_speeds();
 
 	if (TestBedSettings::debug_mode)
 		std::cout << "seg_ID:" << this->seg_id << "	,speed:" << speed << "	,moving:" << this->all_lanes[0]->queue_status->in_moving_vehicles << "	,all:"
@@ -420,6 +425,9 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 		double speed = GeneralTool::calculate_speed_based_on_density(moving_density);
 		seg->hash_table_speed->add_time_speed(current_time_step, speed);
 
+		if (current_time_step % TestBedSettings::remove_speed_frequency == 0)
+			seg->xy_clear_old_speeds();
+
 		if (TestBedSettings::debug_mode)
 			std::cout << "seg_ID:" << seg->seg_id << "	,speed:" << speed << "	,moving:" << seg->all_lanes[0]->queue_status->in_moving_vehicles << "	,all:"
 					<< seg->all_lanes[0]->queue_status->total_onside_vehicles << "	,queue:" << seg->all_lanes[0]->queue_status->current_queue_length << "	,empty space:"
@@ -445,6 +453,9 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 		double moving_density = seg->all_lanes[0]->queue_status->in_moving_vehicles / moving_length;
 		double speed = GeneralTool::calculate_speed_based_on_density(moving_density);
 		seg->hash_table_speed->add_time_speed(current_time_step, speed);
+
+		if (current_time_step % TestBedSettings::remove_speed_frequency == 0)
+			seg->xy_clear_old_speeds();
 
 		if (TestBedSettings::debug_mode)
 			std::cout << "seg_ID:" << seg->seg_id << "	,speed:" << speed << "	,moving:" << seg->all_lanes[0]->queue_status->in_moving_vehicles << "	,all:"
@@ -538,11 +549,9 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 				total_empty_space = seg->seg_length - seg->all_lanes[0]->queue_status->current_queue_length;
 			}
 
-
-			if(total_empty_space < 0) total_empty_space = 0;
+			if (total_empty_space < 0)
+				total_empty_space = 0;
 			assert(total_empty_space >= 0);
-
-
 
 			seg->all_lanes[0]->empty_space = total_empty_space;
 		}
@@ -566,7 +575,8 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 				total_empty_space = seg->seg_length - seg->all_lanes[0]->queue_status->current_queue_length;
 			}
 
-			if(total_empty_space < 0) total_empty_space = 0;
+			if (total_empty_space < 0)
+				total_empty_space = 0;
 
 			assert(total_empty_space >= 0);
 
@@ -582,6 +592,18 @@ void Segment::reset_simulation_per_time_step() {
 	}
 }
 
-void Segment::xy_add_a_new_vehicle_in_segment(int lane_id) {
+//void Segment::xy_add_a_new_vehicle_in_segment(int lane_id) {
+//
+//}
 
+void Segment::xy_clear_old_speeds() {
+	if (this->all_lanes[0]->vehiclePackageQueue.size() <= 0)
+		return;
+
+	for (int i = this->last_remove_time_step + TestBedSettings::time_step_unit; i <= this->all_lanes[0]->vehiclePackageQueue.queueFront->joinTime - TestBedSettings::time_step_unit; i +=
+			TestBedSettings::time_step_unit) {
+		this->hash_table_speed->speed_his.erase(i);
+	}
+
+	this->last_remove_time_step = this->all_lanes[0]->vehiclePackageQueue.queueFront->joinTime - TestBedSettings::time_step_unit;
 }

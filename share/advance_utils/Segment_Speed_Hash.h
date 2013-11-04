@@ -9,7 +9,7 @@
 #define SEGMENT_SPEED_HASH_HPP_
 
 #include <map>
-//#include <unordered_map>
+#include <unordered_map>
 
 #include "../TestBedSettings.h"
 
@@ -31,8 +31,8 @@ public:
 
 public:
 	//it is not supported on some computer
-//	std::unordered_map<int, double> speed_his;
-	std::map<int, double> speed_his;
+	std::unordered_map<int, double> speed_his;
+//	std::map<int, double> speed_his;
 };
 
 #endif /* SEGMENT_SPEED_HASH_HPP_ */

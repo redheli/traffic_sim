@@ -53,6 +53,9 @@ public:
 
 	int outside_capacity_per_time_step_unit;
 	int inside_capacity_per_time_step_unit;
+
+	int capacity_ratio;
+
 	double empty_space;
 
 	/*

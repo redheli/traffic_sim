@@ -39,13 +39,18 @@ public:
 	/*
 	 *
 	 */
-	void xy_move_agents_to_next_segment(int current_time_step);
+	void xy_clear_old_speeds();
 
 	/*
-	 * Set of functions for the new framework
-	 * If name starts from "xy", the function is only used by the new framework
+	 *
 	 */
-	void xy_add_a_new_vehicle_in_segment(int lane_id);
+	void xy_move_agents_to_next_segment(int current_time_step);
+
+//	/*
+//	 * Set of functions for the new framework
+//	 * If name starts from "xy", the function is only used by the new framework
+//	 */
+//	void xy_add_a_new_vehicle_in_segment(int lane_id);
 
 	/**
 	 * process seg 1 and seg 2;
@@ -70,6 +75,11 @@ public:
 	 */
 	int who_can_pass_time;
 	double who_can_pass_offset;
+
+	/*
+	 * Used to remove items in hash table
+	 */
+	int last_remove_time_step;
 };
 
 #endif /* SEGMENT_H_ */
