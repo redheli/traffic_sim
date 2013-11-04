@@ -64,6 +64,7 @@ public:
 public:
 	int seg_id;
 	double seg_length;
+	double free_space; // free space to handle vh move in
 
 	std::vector<Lane*> all_lanes;
 	Segment_Speed_Hash* hash_table_speed;
