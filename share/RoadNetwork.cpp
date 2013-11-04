@@ -91,25 +91,98 @@ void RoadNetwork::update()
 {
     double dt = 0.1;
     double speed_move_in_queue = 3;
+    double speed_moveing = 30;
 	// seg 4
-	for(int i=0; i< seg4->queue_veh.size(); ++i)
+//    std::priority_queue<Vehicle*> queue_veh_tmp;
+    size_t queue_size = seg4->queue_veh.size();
+	for(int i=0; i< queue_size; ++i)
 	{
-		Vehicle *vh = seg4->queue_veh[i];
+		Vehicle *vh = seg4->queue_veh.front();
+		seg4->queue_veh.pop();
+		// check vh can go to next seg?
 		vh->position += dt*speed_move_in_queue;
 		if(vh->position > seg4->seg_length)
 		{
 			// out
-
+			delete vh;
+		}
+		else
+		{
+			// if can not push to tmp queue
+			seg4->queue_veh.push(vh);
 		}
 	}
+	// calculate queue size
+	Vehicle *last_vh = seg4->queue_veh.back();
+	seg4->queue_length = seg4->seg_length - last_vh->position;
+	// move queue
+	size_t move_queue_size = seg4->move_veh.size();
+	for(int i=0; i< move_queue_size; ++i)
+	{
+		Vehicle *vh = seg4->move_veh.front();
+		seg4->move_veh.pop();
+		// calcu vh position , check if enter the queue
+		vh->position += dt*speed_moveing;
+		if(vh->position > seg4->seg_length - seg4->queue_length)
+		{
+			vh->position = seg4->seg_length - seg4->queue_length - vh->length;
+			seg4->queue_length = seg4->seg_length - vh->position;
+		}
+		else
+		{
+			// still in moving queue
+			seg4->move_veh.push(vh);
+		}
+	}
+
 	// seg 5
-	seg5->update_time_dynamit_framework();
-	// seg 3
-	seg3->update_time_dynamit_framework();
-	// seg 1
-	seg1->update_time_dynamit_framework();
-	// seg 2
-	seg2->update_time_dynamit_framework();
+	 size_t queue_size = seg5->queue_veh.size();
+		for(int i=0; i< queue_size; ++i)
+		{
+			Vehicle *vh = seg5->queue_veh.front();
+			seg5->queue_veh.pop();
+			// check vh can go to next seg?
+			vh->position += dt*speed_move_in_queue;
+			if(vh->position > seg5->seg_length)
+			{
+				// out
+				delete vh;
+			}
+			else
+			{
+				// if can not push to tmp queue
+				seg5->queue_veh.push(vh);
+			}
+		}
+		// calculate queue size
+		Vehicle *last_vh = seg5->queue_veh.back();
+		seg5->queue_length = seg5->seg_length - last_vh->position;
+		// move queue
+		size_t move_queue_size = seg5->move_veh.size();
+		for(int i=0; i< move_queue_size; ++i)
+		{
+			Vehicle *vh = seg5->move_veh.front();
+			seg5->move_veh.pop();
+			// calcu vh position , check if enter the queue
+			vh->position += dt*speed_moveing;
+			if(vh->position > seg5->seg_length - seg5->queue_length)
+			{
+				vh->position = seg5->seg_length - seg5->queue_length - vh->length;
+				seg5->queue_length = seg5->seg_length - vh->position;
+			}
+			else
+			{
+				// still in moving queue
+				seg5->move_veh.push(vh);
+			}
+		}
+//	seg5->update_time_dynamit_framework();
+//	// seg 3
+//	seg3->update_time_dynamit_framework();
+//	// seg 1
+//	seg1->update_time_dynamit_framework();
+//	// seg 2
+//	seg2->update_time_dynamit_framework();
 
 	// add vh to network
 

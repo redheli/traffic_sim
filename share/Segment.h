@@ -57,7 +57,10 @@ public:
 	 * process seg 1 and seg 2;
 	 */
 	static void xy_simulate_seg1_2_together(int current_time_step);
-
+public:
+	std::queue<Vehicle*> queue_veh; // store vh in queue
+	double queue_length;
+	std::queue<Vehicle*> move_veh; // store moving vh
 public:
 	int seg_id;
 	double seg_length;

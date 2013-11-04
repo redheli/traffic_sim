@@ -20,6 +20,8 @@ Vehicle::Vehicle()
 
 	static int seed_vehicle_ID = 0;
 	ID = seed_vehicle_ID++;
+
+	length = 3.0;
 }
 
 Vehicle::~Vehicle() {

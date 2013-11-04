@@ -35,6 +35,8 @@ public:
 	int origin_node_id;
 	int densition_node_id;
 
+	double length; // vh length
+
 	/*
 	 * used in the new framework
 	 */
