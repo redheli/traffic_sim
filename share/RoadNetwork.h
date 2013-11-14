@@ -18,7 +18,7 @@ public:
 	virtual ~RoadNetwork();
 
 	void init_network();
-    void update();
+    void update(double dt);
 	/*
 	 * Using New Framework
 	 */

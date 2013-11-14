@@ -87,9 +87,9 @@ void RoadNetwork::xy_simulate_seg1_2_together(int current_time_step)
 {
 
 }
-void RoadNetwork::update()
+void RoadNetwork::update(double dt)
 {
-    double dt = 0.1;
+//    double dt = 0.1;
     double speed_move_in_queue = 3;
     double speed_moveing = 30;
 	// seg 4
