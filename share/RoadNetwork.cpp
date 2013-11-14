@@ -16,11 +16,11 @@
 RoadNetwork RoadNetwork::instance_;
 
 RoadNetwork::RoadNetwork() {
-	seg1 = NULL;
-	seg2 = NULL;
-	seg3 = NULL;
-	seg4 = NULL;
-	seg5 = NULL;
+	seg1 = new Segment(); seg1->seg_id = 1;
+	seg2 = new Segment(); seg2->seg_id = 2;
+	seg3 = new Segment(); seg3->seg_id = 3;
+	seg4 = new Segment(); seg4->seg_id = 4;
+	seg5 = new Segment(); seg5->seg_id = 5;
 }
 
 RoadNetwork::~RoadNetwork() {
