@@ -30,7 +30,7 @@ echo "========================================"
 
 ##
 ##different time set
-for timestep in 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30
+for timestep in 2 4 6 8 10 12 14 16 18 20 22 24 32
 do
 
 echo "time $timestep" >> timestep.txt
@@ -51,7 +51,7 @@ echo "========================================"
 
 ##
 ##different time set
-for loading_freq in 1 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30
+for loading_freq in 2 2.3 2.5 2.7 3 3.2 3.5 3.8 4 4.5 5 5.5 6 7 8 9 10
 do
 
 echo "loading_freq $loading_freq" >> loading_freq.txt
@@ -59,7 +59,7 @@ echo "loading_freq $loading_freq" >> loading_freq.txt
 for loop in {1..10}
 do
 
-./Release/traffic_sim 86400 2 5000 $loading_freq 1 0 >> loading_freq.txt
+./Release/traffic_sim 7200 2 5000 $loading_freq 1 0 >> loading_freq.txt
 
 done ##end of loop
 echo "-----------------------------" >> loading_freq.txt

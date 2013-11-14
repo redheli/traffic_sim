@@ -98,9 +98,9 @@ void Lane::update_queue_status_when_moving_segment(int time_step_in_queue) {
 
 void Lane::update_queue_status_after_moving_segment(int time_step) {
 
-	if (time_step == 48) {
-		int iii = 1;
-	}
+//	if (time_step == 48) {
+//		int iii = 1;
+//	}
 
 	while (true) {
 		if (queue_status->end_queue_VehiclePackage == NULL) {

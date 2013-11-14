@@ -9,11 +9,23 @@
 #define SEGMENT_SPEED_HASH_HPP_
 
 #include <map>
+#include <vector>
 #include <unordered_map>
+#include <google/dense_hash_map>
 
 #include "../TestBedSettings.h"
 
+using google::dense_hash_map;
 using namespace std;
+using std::tr1::hash;
+
+struct eqstr
+{
+  bool operator()(int s1, int s2) const
+  {
+    return (s1 == s2);
+  }
+};
 
 class Segment_Speed_Hash {
 public:
@@ -29,10 +41,19 @@ public:
 	 */
 	double get_time_speed(int time);
 
+	/*
+	 *
+	 */
+	void resizeTable();
+
 public:
 	//it is not supported on some computer
-	std::unordered_map<int, double> speed_his;
+//	google::dense_hash_map<int, double, std::tr1::hash<int>, eqstr> speed_his;
+//	std::unordered_map<int, double> speed_his;
 //	std::map<int, double> speed_his;
+
+	std::vector<double> speed_his;
+
 };
 
 #endif /* SEGMENT_SPEED_HASH_HPP_ */

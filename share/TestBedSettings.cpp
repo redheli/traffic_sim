@@ -24,10 +24,10 @@ double TestBedSettings::VEHICLE_LENGTH = 5; // m
 double TestBedSettings::VEHICLE_OCCUPANCY_LENGTH = (1.5 * VEHICLE_LENGTH); // m
 
 double TestBedSettings::MAX_SPEED = 25; // m/s
-double TestBedSettings::MIN_SPEED = 5; // m/s
+double TestBedSettings::MIN_SPEED = 1; // m/s
 double TestBedSettings::MAX_LANE_DENSITY = 1.0 / (VEHICLE_OCCUPANCY_LENGTH); //max number of vehicle in a lane
 
-int TestBedSettings::loading_freq = 1 * time_step_unit; //how many time_step_units load once
+double TestBedSettings::loading_freq = 1 * time_step_unit; //how many time_step_units load once
 int TestBedSettings::loading_vehicles = 1; //how many vehicles load once
 
 bool TestBedSettings::debug_mode = false;

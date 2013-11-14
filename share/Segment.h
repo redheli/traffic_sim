@@ -79,7 +79,7 @@ public:
 	/*
 	 * Used to remove items in hash table
 	 */
-	int last_remove_time_step;
+//	int last_remove_time_step;
 };
 
 #endif /* SEGMENT_H_ */

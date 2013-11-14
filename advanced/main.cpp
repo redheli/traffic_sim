@@ -71,7 +71,7 @@ int init_simulation(int argc, char* argv[]) {
 		TestBedSettings::lane_outside_capacity_per_time_step_unit = 1800 * TestBedSettings::time_step_unit / 3600; //vehicles per time_step_unit
 		TestBedSettings::lane_inside_capacity_per_time_step_unit = 1800 * TestBedSettings::time_step_unit / 3600; //vehicles per time_step_unit
 
-		TestBedSettings::loading_freq = atoi(argv[4]);
+		TestBedSettings::loading_freq = atof(argv[4]);
 		TestBedSettings::loading_vehicles = atoi(argv[5]);
 
 		if (atoi(argv[6]) == 1) {
@@ -121,11 +121,15 @@ int load_vehicles_one_time_step() {
 //		std::cout << "load_vehicles_one_time_step: " << std::endl;
 
 	static int loading_in_who = 0;
+	static double left_value = TestBedSettings::start_time_step;
 
-	if (current_time_step % TestBedSettings::loading_freq == 0) {
+	left_value += TestBedSettings::time_step_unit;
 
-		if (RoadNetwork::instance().seg1->all_lanes[0]->empty_space < TestBedSettings::VEHICLE_OCCUPANCY_LENGTH * 2
-				|| RoadNetwork::instance().seg2->all_lanes[0]->empty_space < TestBedSettings::VEHICLE_OCCUPANCY_LENGTH * 2) {
+	if (left_value >= TestBedSettings::loading_freq) {
+		left_value -= TestBedSettings::loading_freq;
+
+		if (RoadNetwork::instance().seg1->all_lanes[0]->empty_space < TestBedSettings::VEHICLE_OCCUPANCY_LENGTH * TestBedSettings::loading_vehicles
+				|| RoadNetwork::instance().seg2->all_lanes[0]->empty_space < TestBedSettings::VEHICLE_OCCUPANCY_LENGTH * TestBedSettings::loading_vehicles) {
 
 //			std::cout << "no space to load_vehicles_one_time_step: 0" << std::endl;
 

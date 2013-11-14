@@ -15,12 +15,16 @@ Segment::Segment() {
 	who_can_pass_time = TestBedSettings::start_time_step - TestBedSettings::time_step_unit;
 	who_can_pass_offset = 0;
 
-	last_remove_time_step = TestBedSettings::start_time_step - TestBedSettings::time_step_unit;
+//	last_remove_time_step = TestBedSettings::start_time_step - TestBedSettings::time_step_unit;
 }
 
 Segment::~Segment() {
 	if (hash_table_speed) {
 		delete hash_table_speed;
+	}
+
+	if (this->all_lanes[0]) {
+		delete this->all_lanes[0];
 	}
 }
 
@@ -36,8 +40,11 @@ void Segment::xy_update_time(int current_time_step) {
 
 //Step 1: Update Speed
 	//only 1 lane, so hard coded
-	double moving_length = this->seg_length - this->all_lanes[0]->queue_status->current_queue_length;
-	double moving_density = this->all_lanes[0]->queue_status->in_moving_vehicles / moving_length;
+//	double moving_length = this->seg_length - this->all_lanes[0]->queue_status->current_queue_length;
+//	double moving_density = this->all_lanes[0]->queue_status->in_moving_vehicles / moving_length;
+
+	double moving_density = this->all_lanes[0]->queue_status->total_onside_vehicles / this->seg_length;
+
 	double speed = GeneralTool::calculate_speed_based_on_density(moving_density);
 	this->hash_table_speed->add_time_speed(current_time_step, speed);
 
@@ -171,8 +178,6 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 	else if (seg_id == 3) {
 		bool can_stop = false;
 
-		int iii = 0;
-
 		while (can_stop == false && out_capacity > 0 && this->all_lanes[0]->vehiclePackageQueue.empty() == false) {
 
 //			std::cout << "this->all_lanes[0]->vehiclePackageQueue:" << this->all_lanes[0]->vehiclePackageQueue.package_size << std::endl;
@@ -185,11 +190,6 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 				//leave the segment
 
 				break;
-			}
-
-			iii++;
-			if (iii == 2) {
-				iii = 3;
 			}
 
 //			std::cout << "can_stop:" << can_stop << std::endl;
@@ -288,6 +288,9 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 			//if no more vehicle, remove this package
 			if (the_last->inner_vehicles.size() <= 0) {
 				all_lanes[0]->vehiclePackageQueue.pop();
+
+				if (the_last)
+					delete the_last;
 			}
 		}
 	}
@@ -420,8 +423,11 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 //only 1 lane, so hard coded
 	{
 		Segment* seg = RoadNetwork::instance().seg1;
-		double moving_length = seg->seg_length - seg->all_lanes[0]->queue_status->current_queue_length;
-		double moving_density = seg->all_lanes[0]->queue_status->in_moving_vehicles / moving_length;
+//		double moving_length = seg->seg_length - seg->all_lanes[0]->queue_status->current_queue_length;
+//		double moving_density = seg->all_lanes[0]->queue_status->in_moving_vehicles / moving_length;
+
+		double moving_density = seg->all_lanes[0]->queue_status->total_onside_vehicles / seg->seg_length;
+
 		double speed = GeneralTool::calculate_speed_based_on_density(moving_density);
 		seg->hash_table_speed->add_time_speed(current_time_step, speed);
 
@@ -449,8 +455,11 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 
 	{
 		Segment* seg = RoadNetwork::instance().seg2;
-		double moving_length = seg->seg_length - seg->all_lanes[0]->queue_status->current_queue_length;
-		double moving_density = seg->all_lanes[0]->queue_status->in_moving_vehicles / moving_length;
+//		double moving_length = seg->seg_length - seg->all_lanes[0]->queue_status->current_queue_length;
+//		double moving_density = seg->all_lanes[0]->queue_status->in_moving_vehicles / moving_length;
+
+		double moving_density = seg->all_lanes[0]->queue_status->total_onside_vehicles / seg->seg_length;
+
 		double speed = GeneralTool::calculate_speed_based_on_density(moving_density);
 		seg->hash_table_speed->add_time_speed(current_time_step, speed);
 
@@ -597,13 +606,13 @@ void Segment::reset_simulation_per_time_step() {
 //}
 
 void Segment::xy_clear_old_speeds() {
-	if (this->all_lanes[0]->vehiclePackageQueue.size() <= 0)
-		return;
-
-	for (int i = this->last_remove_time_step + TestBedSettings::time_step_unit; i <= this->all_lanes[0]->vehiclePackageQueue.queueFront->joinTime - TestBedSettings::time_step_unit; i +=
-			TestBedSettings::time_step_unit) {
-		this->hash_table_speed->speed_his.erase(i);
-	}
-
-	this->last_remove_time_step = this->all_lanes[0]->vehiclePackageQueue.queueFront->joinTime - TestBedSettings::time_step_unit;
+//	if (this->all_lanes[0]->vehiclePackageQueue.size() <= 0)
+//		return;
+//
+//	for (int i = this->last_remove_time_step + TestBedSettings::time_step_unit; i <= this->all_lanes[0]->vehiclePackageQueue.queueFront->joinTime - TestBedSettings::time_step_unit; i +=
+//			TestBedSettings::time_step_unit) {
+//		this->hash_table_speed->speed_his.erase(i);
+//	}
+//
+//	this->last_remove_time_step = this->all_lanes[0]->vehiclePackageQueue.queueFront->joinTime - TestBedSettings::time_step_unit;
 }
