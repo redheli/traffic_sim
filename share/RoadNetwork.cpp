@@ -230,6 +230,7 @@ void RoadNetwork::update()
 					vh->position = vh->position - seg3->seg_length;
 					seg4->move_veh.push(vh);
 					seg4->free_space = seg4->free_space - vh->length;
+					seg4->move_veh.push(vh);
 				}
 				else // can not enter seg4, keep in current queue
 				{
@@ -244,6 +245,7 @@ void RoadNetwork::update()
 					vh->position = vh->position - seg5->seg_length;
 					seg5->move_veh.push(vh);
 					seg5->free_space = seg4->free_space - vh->length;
+					seg5->move_veh.push(vh);
 				}
 				else // can not enter seg5, keep in current queue
 				{
@@ -258,6 +260,16 @@ void RoadNetwork::update()
 			break; // no need check rest vh
 		}
 	}// queue
+	// calculate queue size
+	if(!seg3->queue_veh.empty()) // at least on vh in queue
+	{
+		Vehicle *last_vh = seg3->queue_veh.back();
+		seg3->queue_length = seg3->seg_length - last_vh->position;
+	}
+	else
+	{
+		seg3->queue_length = 0;
+	}
 	// moving queue
 	size_t move_queue_size3 = seg3->move_veh.size();
 	for(int i=0; i< move_queue_size3; ++i)
@@ -270,6 +282,7 @@ void RoadNetwork::update()
 		{
 			vh->position = seg3->seg_length - seg3->queue_length - vh->length;
 			seg3->queue_length = seg3->seg_length - vh->position;
+			seg3->queue_veh.push(vh);
 		}
 		else
 		{
@@ -304,6 +317,7 @@ void RoadNetwork::update()
 						vh->position = vh->position - seg1->seg_length;
 						seg3->move_veh.push(vh);
 						seg3->free_space = seg3->free_space - vh->length;
+						seg3->move_veh.push(vh);
 					}
 					else // can not enter seg3, keep in current queue , and not update position
 					{
@@ -318,6 +332,16 @@ void RoadNetwork::update()
 					seg1->queue_veh.push(vh);
 				}
 			}// queue
+			// calculate queue size
+				if(!seg1->queue_veh.empty()) // at least on vh in queue
+				{
+					Vehicle *last_vh = seg1->queue_veh.back();
+					seg1->queue_length = seg1->seg_length - last_vh->position;
+				}
+				else
+				{
+					seg1->queue_length = 0;
+				}
 			// moving queue
 			size_t move_queue_size1 = seg1->move_veh.size();
 			for(int i=0; i< move_queue_size1; ++i)
@@ -363,6 +387,7 @@ void RoadNetwork::update()
 										vh->position = vh->position - seg2->seg_length;
 										seg3->move_veh.push(vh);
 										seg3->free_space = seg3->free_space - vh->length;
+										seg3->move_veh.push(vh);
 									}
 									else // can not enter seg3, keep in current queue , and not update position
 									{
@@ -377,6 +402,16 @@ void RoadNetwork::update()
 									seg2->queue_veh.push(vh);
 								}
 							}// queue
+							// calculate queue size
+											if(!seg2->queue_veh.empty()) // at least on vh in queue
+											{
+												Vehicle *last_vh = seg2->queue_veh.back();
+												seg2->queue_length = seg2->seg_length - last_vh->position;
+											}
+											else
+											{
+												seg2->queue_length = 0;
+											}
 							// moving queue
 							size_t move_queue_size2 = seg2->move_veh.size();
 							for(int i=0; i< move_queue_size2; ++i)
