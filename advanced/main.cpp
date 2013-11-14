@@ -9,6 +9,8 @@
 
 #include "../share/shared_include.h"
 
+#ifndef USE_DYNAMIT
+
 #include "../share/TestBedSettings.h"
 #include "../share/RoadNetwork.h"
 #include "../share/advance_utils/VehiclePackage.h"
@@ -208,3 +210,4 @@ int close_simulation() {
 	return 1;
 }
 
+#endif

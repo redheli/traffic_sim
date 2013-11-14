@@ -55,13 +55,14 @@ public:
 	int inside_capacity_per_time_step_unit;
 
 	int capacity_ratio;
-
 	double empty_space;
 
 	/*
 	 * For the DynaMIT framework
 	 */
-
+	std::queue<Vehicle*> queue_veh; // store vh in queue
+	double queue_length;
+	std::queue<Vehicle*> move_veh; // store moving vh
 };
 
 #endif /* LANE_H_ */

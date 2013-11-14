@@ -80,6 +80,17 @@ public:
 	 * Used to remove items in hash table
 	 */
 //	int last_remove_time_step;
+public:
+	/*
+	 * Using DynaMIT Framework
+	 */
+	void dy_update_time(int current_time_step);
+
+	/*
+	 *Using DynaMIT Framework
+	 */
+	void dy_simulate_seg1_2_together(int current_time_step);
+
 };
 
 #endif /* SEGMENT_H_ */

@@ -16,4 +16,6 @@
 #include <assert.h>
 #include <cstdlib>
 
+#define USE_DYNAMIT
+
 #endif /* SHARED_INCLUDE_H_ */

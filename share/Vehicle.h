@@ -22,6 +22,7 @@ public:
 	virtual ~Vehicle();
 public:
 	int ID;
+	double position; // position on the lane
 
 	Vehicle *next;
 	Vehicle *previous;
