@@ -9,14 +9,14 @@
 #define LANE_H_
 
 #include "shared_include.h"
-
-#include "LaneQueue.h"
-#include "Vehicle.h"
-#include "advance_utils/VehiclePackage.h"
 #include "advance_utils/VehiclePackageQueue.h"
+#include "LaneQueue.h"
 
 class Segment;
-class LaneQueue;
+//class LaneQueue;
+class Vehicle;
+class VehiclePackage;
+//class VehiclePackageQueue;
 
 class Lane {
 public:
@@ -60,9 +60,9 @@ public:
 	/*
 	 * For the DynaMIT framework
 	 */
-	std::queue<Vehicle*> queue_veh; // store vh in queue
+	std::deque<Vehicle*> queue_veh; // store vh in queue
 	double queue_length;
-	std::queue<Vehicle*> move_veh; // store moving vh
+	std::deque<Vehicle*> move_veh; // store moving vh
 };
 
 #endif /* LANE_H_ */

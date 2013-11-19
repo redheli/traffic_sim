@@ -14,7 +14,7 @@
 
 #include <vector>
 
-class Segment;
+//class Segment;
 
 class Vehicle {
 public:
@@ -22,6 +22,8 @@ public:
 	virtual ~Vehicle();
 public:
 	int ID;
+
+	//location of the front of the vehicle
 	double position; // position on the lane
 
 	Vehicle *next;
@@ -30,7 +32,7 @@ public:
 	/*
 	 * need path to know next segment
 	 */
-	std::vector<Segment*> path;
+//	std::vector<Segment*> path;
 
 	int origin_node_id;
 	int densition_node_id;

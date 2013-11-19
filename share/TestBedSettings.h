@@ -41,7 +41,7 @@ public:
 	/*
 	 * Demand (OD) related
 	 */
-	static double loading_freq; //how many time_step_units load once
+	static long loading_total_volumn; //how many time_step_units load once
 	static int loading_vehicles; //how many vehicles load once
 
 	/*

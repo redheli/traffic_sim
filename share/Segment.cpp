@@ -64,7 +64,7 @@ void Segment::xy_update_time(int current_time_step) {
 		who_can_pass_time += TestBedSettings::time_step_unit;
 
 		//add queue length
-		this->all_lanes[0]->update_queue_status_when_moving_segment(who_can_pass_time);
+//		this->all_lanes[0]->update_queue_status_when_moving_segment(who_can_pass_time);
 
 		who_can_pass_offset -= this->hash_table_speed->get_time_speed(who_can_pass_time) * TestBedSettings::time_step_unit;
 	}
@@ -76,7 +76,7 @@ void Segment::xy_update_time(int current_time_step) {
 	xy_move_agents_to_next_segment(current_time_step);
 
 //Step 4: Update Queue
-	this->all_lanes[0]->update_queue_status_after_moving_segment(who_can_pass_time);
+//	this->all_lanes[0]->update_queue_status_after_moving_segment(who_can_pass_time);
 
 //Step 5: Update Empty Space
 	if (this->all_lanes[0]->vehiclePackageQueue.empty()) {

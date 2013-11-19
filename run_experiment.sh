@@ -7,17 +7,17 @@
 
 rm length.txt
 rm timestep.txt
-rm loading_freq.txt
+rm loading_volumn.txt
 
-for length in 1000 5000 10000 20000 500000 100000
+for length2 in 100 200 500 1000 2000 5000 10000 20000 50000
 do
 
-echo "length $length" >> length.txt
+echo "length $length2" >> length.txt
 
 for loop in {1..10}
 do
 
-./Release/traffic_sim 86400 2 $length 8 1 0 >> length.txt
+./Debug/traffic_sim 86400 2 $length2 48000 0 >> length.txt
 
 done ##end of loop
 echo "-----------------------------" >> length.txt
@@ -30,15 +30,16 @@ echo "========================================"
 
 ##
 ##different time set
-for timestep in 2 4 6 8 10 12 14 16 18 20 22 24 32
+for timestep2 in 2 4 6 8 10 12 14 16 18 20 22 24 32
 do
 
-echo "time $timestep" >> timestep.txt
+echo "time $timestep2" >> timestep.txt
 
 for loop in {1..10}
 do
 
-./Release/traffic_sim 86400 $timestep 5000 8 1 0 >> timestep.txt
+##echo "./Debug/traffic_sim 7200 $timestep2 5000 4000 0"
+./Debug/traffic_sim 86400 $timestep2 5000 48000 0 >> timestep.txt
 
 done ##end of loop
 echo "-----------------------------" >> timestep.txt
@@ -51,17 +52,17 @@ echo "========================================"
 
 ##
 ##different time set
-for loading_freq in 2 2.3 2.5 2.7 3 3.2 3.5 3.8 4 4.5 5 5.5 6 7 8 9 10
+for loading_volumn2 in 1000 2000 5000 10000 20000 50000 100000
 do
 
-echo "loading_freq $loading_freq" >> loading_freq.txt
+echo "loading_volumn $loading_volumn2" >> loading_volumn.txt
 
 for loop in {1..10}
 do
 
-./Release/traffic_sim 7200 2 5000 $loading_freq 1 0 >> loading_freq.txt
+./Debug/traffic_sim 86400 2 5000 $loading_volumn2 0 >> loading_volumn.txt
 
 done ##end of loop
-echo "-----------------------------" >> loading_freq.txt
+echo "-----------------------------" >> loading_volumn.txt
 
 done ##end of loop length

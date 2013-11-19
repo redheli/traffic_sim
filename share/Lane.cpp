@@ -9,6 +9,10 @@
 #include "TestBedSettings.h"
 #include "Segment.h"
 
+#include "Vehicle.h"
+#include "advance_utils/VehiclePackage.h"
+
+
 Lane::Lane() {
 	lane_id = 0;
 	the_segment = NULL;
@@ -23,6 +27,7 @@ Lane::Lane() {
 	empty_space = 0;
 
 	capacity_ratio = 1;
+	queue_length = 0;
 
 //	is_blocked = false;
 //	total_onside_vehicles = 0;
@@ -39,6 +44,10 @@ void Lane::reset_input_output_capacity() {
 //	is_blocked = false;
 	outside_capacity_per_time_step_unit = TestBedSettings::lane_outside_capacity_per_time_step_unit * this->capacity_ratio;
 	inside_capacity_per_time_step_unit = TestBedSettings::lane_inside_capacity_per_time_step_unit * this->capacity_ratio;
+
+#ifdef USE_DYNAMIT
+	queue_length = 0;
+#endif
 }
 
 void Lane::update_queue_status_when_moving_segment(int time_step_in_queue) {
