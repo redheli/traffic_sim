@@ -60,14 +60,23 @@ void Segment::xy_update_time(int current_time_step) {
 	who_can_pass_offset += speed * TestBedSettings::time_step_unit;
 	this->all_lanes[0]->queue_status->the_accumulated_offset += speed * TestBedSettings::time_step_unit;
 
+	if (this->seg_id == 3 && this->all_lanes[0]->queue_status->current_queue_length > 0) {
+		std::cout << "this->all_lanes[0]->queue_length:" << this->all_lanes[0]->queue_status->current_queue_length << std::endl;
+	}
+
 	while (who_can_pass_offset > this->seg_length) {
 		who_can_pass_time += TestBedSettings::time_step_unit;
 
 		//add queue length
-//		this->all_lanes[0]->update_queue_status_when_moving_segment(who_can_pass_time);
+		this->all_lanes[0]->update_queue_status_when_moving_segment(who_can_pass_time);
 
 		who_can_pass_offset -= this->hash_table_speed->get_time_speed(who_can_pass_time) * TestBedSettings::time_step_unit;
 	}
+
+//	if(this->seg_id == 3)
+//	{
+//		std::cout << "this->ccc:" << this->all_lanes[0]->queue_status->current_queue_length << std::endl;
+//	}
 
 //	if (TestBedSettings::debug_mode)
 //		std::cout << "seg " << this->seg_id << ",who_can_pass_offset:" << who_can_pass_offset << ",who_can_pass_time:" << who_can_pass_time << std::endl;
@@ -76,7 +85,7 @@ void Segment::xy_update_time(int current_time_step) {
 	xy_move_agents_to_next_segment(current_time_step);
 
 //Step 4: Update Queue
-//	this->all_lanes[0]->update_queue_status_after_moving_segment(who_can_pass_time);
+	this->all_lanes[0]->update_queue_status_after_moving_segment(who_can_pass_time);
 
 //Step 5: Update Empty Space
 	if (this->all_lanes[0]->vehiclePackageQueue.empty()) {
@@ -101,10 +110,20 @@ void Segment::xy_update_time(int current_time_step) {
 		this->all_lanes[0]->empty_space = total_empty_space;
 	}
 
+#ifdef USE_DEBUY_CODE
+	if(TestBedSettings::debug_mode)
+	{
+		this->debug();
+	}
+#endif
 }
 
 void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 	int out_capacity = this->all_lanes[0]->outside_capacity_per_time_step_unit;
+
+//	static int gt5 = 0;
+//	static int gt6 = 0;
+	int move_in = 0;
 
 	if (seg_id == 4 || seg_id == 5) {
 		while (out_capacity > 0 && this->all_lanes[0]->vehiclePackageQueue.empty() == false) {
@@ -143,6 +162,13 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 				//remove from the list
 				this->all_lanes[0]->vehiclePackageQueue.pop();
 
+#ifdef USE_DEBUY_CODE
+				if(TestBedSettings::debug_mode)
+				{
+					this->all_lanes[0]->count_passing_vehicle += the_last->vehicle_size;
+				}
+#endif
+
 				if (the_last)
 					delete the_last;
 			}
@@ -160,6 +186,13 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 					}
 
 					start_output++;
+
+#ifdef USE_DEBUY_CODE
+					if(TestBedSettings::debug_mode)
+					{
+						this->all_lanes[0]->count_passing_vehicle += the_last->vehicle_size;
+					}
+#endif
 				}
 
 				the_last->vehicle_size -= out_capacity;
@@ -232,6 +265,12 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 
 					the_back->inner_vehicles.push_back(*it);
 					the_back->vehicle_size++;
+
+					if (this->seg_id == 3) {
+//						std::cout << "one go to 5:" << gt5 << std::endl;
+//						gt5++;
+						move_in ++;
+					}
 				}
 				else if (the_vehicle->densition_node_id == 6) {
 					Lane* go_to = RoadNetwork::instance().seg5->all_lanes[0];
@@ -268,6 +307,12 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 
 					the_back->inner_vehicles.push_back(*it);
 					the_back->vehicle_size++;
+
+					if (this->seg_id == 3) {
+//						std::cout << "one go to 5:" << gt5 << std::endl;
+//						gt5++;
+						move_in ++;
+					}
 				}
 				else {
 					std::cout << "Error: Not Existing Des When process seg 3" << std::endl;
@@ -292,6 +337,22 @@ void Segment::xy_move_agents_to_next_segment(int current_time_step) {
 				if (the_last)
 					delete the_last;
 			}
+
+#ifdef USE_DEBUY_CODE
+			if(TestBedSettings::debug_mode)
+			{
+				this->all_lanes[0]->count_passing_vehicle += the_last->vehicle_size;
+			}
+#endif
+		}
+
+		if(move_in > 1)
+		{
+			std::cout << "Error cannot move out more than 1:" << move_in << std::endl;
+		}
+		else
+		{
+			std::cout << "move out:" << move_in << std::endl;
 		}
 	}
 	else if (seg_id == 1 || seg_id == 2) {
@@ -340,6 +401,12 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 		VehiclePackage* the_one = RoadNetwork::instance().seg1->all_lanes[0]->vehiclePackageQueue.front();
 		Segment* seg = RoadNetwork::instance().seg1;
 
+#ifdef USE_DEBUY_CODE
+		if(TestBedSettings::debug_mode)
+		{
+			seg->all_lanes[0]->count_passing_vehicle ++;
+		}
+#endif
 		if (the_one->inner_vehicles.size() > 1) {
 			the_one->vehicle_size--;
 			std::vector<Vehicle *>::iterator it = the_one->inner_vehicles.end() - 1;
@@ -378,7 +445,12 @@ Vehicle* Segment::xy_find_the_next_vehicle_package() {
 	else if (pass_2 == true) {
 		VehiclePackage* the_one = RoadNetwork::instance().seg2->all_lanes[0]->vehiclePackageQueue.front();
 		Segment* seg = RoadNetwork::instance().seg2;
-
+#ifdef USE_DEBUY_CODE
+		if(TestBedSettings::debug_mode)
+		{
+			seg->all_lanes[0]->count_passing_vehicle ++;
+		}
+#endif
 		if (the_one->inner_vehicles.size() > 1) {
 			the_one->vehicle_size--;
 			std::vector<Vehicle *>::iterator it = the_one->inner_vehicles.end() - 1;
@@ -564,6 +636,10 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 
 			seg->all_lanes[0]->empty_space = total_empty_space;
 		}
+
+#ifdef USE_DEBUY_CODE
+		seg->debug();
+#endif
 	}
 
 	{
@@ -591,6 +667,9 @@ void Segment::xy_simulate_seg1_2_together(int current_time_step) {
 
 			seg->all_lanes[0]->empty_space = total_empty_space;
 		}
+#ifdef USE_DEBUY_CODE
+		seg->debug();
+#endif
 	}
 }
 
@@ -616,3 +695,15 @@ void Segment::xy_clear_old_speeds() {
 //
 //	this->last_remove_time_step = this->all_lanes[0]->vehiclePackageQueue.queueFront->joinTime - TestBedSettings::time_step_unit;
 }
+
+#ifdef USE_DEBUY_CODE
+void Segment::debug() {
+
+	std::cout << "seg ID:" << this->seg_id << std::endl;
+
+	for (std::vector<Lane*>::iterator it = all_lanes.begin(); it != all_lanes.end(); ++it) {
+		/* std::cout << *it; ... */
+		(*it)->debug();
+	}
+}
+#endif

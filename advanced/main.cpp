@@ -117,7 +117,15 @@ int simulate_one_time_step() {
 	/*
 	 * Segment 1 & 2 simulated together
 	 */
+	int vehicles_1 = RoadNetwork::instance().seg3->all_lanes[0]->queue_status->total_onside_vehicles;
 	RoadNetwork::instance().seg1->xy_simulate_seg1_2_together(current_time_step);
+	int vehicles_2 = RoadNetwork::instance().seg3->all_lanes[0]->queue_status->total_onside_vehicles;
+
+
+	if(vehicles_2 - vehicles_1 > 1)
+	{
+		std::cout << "Error: vehicles_1:" << vehicles_1 << ",vehicles_2:" << vehicles_2 << std::endl;
+	}
 
 	return 1;
 }

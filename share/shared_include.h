@@ -18,5 +18,6 @@
 #include <cstdlib>
 
 //#define USE_DYNAMIT
+//#define USE_DEBUY_CODE
 
 #endif /* SHARED_INCLUDE_H_ */

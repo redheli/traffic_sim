@@ -29,6 +29,10 @@ Lane::Lane() {
 	capacity_ratio = 1;
 	queue_length = 0;
 
+#ifdef USE_DEBUY_CODE
+	count_passing_vehicle = 0;
+#endif
+
 //	is_blocked = false;
 //	total_onside_vehicles = 0;
 //	in_queue_vehicles = 0;
@@ -143,3 +147,9 @@ void Lane::update_queue_status_after_moving_segment(int time_step) {
 	}
 }
 
+#ifdef USE_DEBUY_CODE
+void Lane::debug()
+{
+	std::cout << "flow:" << this->count_passing_vehicle << std::endl;
+}
+#endif

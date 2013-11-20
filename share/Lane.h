@@ -30,6 +30,10 @@ public:
 
 	void update_queue_status_after_moving_segment(int time_step);
 
+#ifdef USE_DEBUY_CODE
+	void debug();
+#endif
+
 public:
 	int lane_id;
 	Segment* the_segment;
@@ -63,6 +67,13 @@ public:
 	std::deque<Vehicle*> queue_veh; // store vh in queue
 	double queue_length;
 	std::deque<Vehicle*> move_veh; // store moving vh
+
+	/*
+	 * for debug
+	 */
+#ifdef USE_DEBUY_CODE
+	int count_passing_vehicle;
+#endif
 };
 
 #endif /* LANE_H_ */

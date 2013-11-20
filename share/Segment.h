@@ -62,6 +62,13 @@ public:
 	 */
 	void xy_simulate_seg1_2_together(int current_time_step);
 
+	/**
+	 * output something
+	 */
+#ifdef USE_DEBUY_CODE
+	void debug();
+#endif
+
 public:
 	int seg_id;
 	double seg_length;
